@@ -6,6 +6,7 @@ public  abstract class Personagem {
     int defesa;
     int alcance;
     int movimento;
+    int custo;
     String nome;
     String inGame;
 

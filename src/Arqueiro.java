@@ -9,6 +9,7 @@ public class Arqueiro extends Personagem {
         this.movimento = 4;
         this.nome = "Arqueiro";
         this.inGame = this.nome+" Vida:"+this.vida;
+        this.custo = 2;
 
     }
 
