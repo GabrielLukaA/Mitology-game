@@ -1,12 +1,12 @@
 public class Zeus extends Deus {
-    public Zeus(int numero){
+    public Zeus(int numero) {
         this.vida = 200;
         this.ataque = 90;
         this.defesa = 0;
-        this.alcance =3;
+        this.alcance = 3;
         this.movimento = 4;
-        this.nome = "Arqueiro";
-        this.inGame = this.nome+" Vida:"+this.vida;
+        this.nome = "Zeus";
+        this.inGame = this.nome + " Vida:" + this.vida;
         this.custo = 15;
         this.barraEspecial = 0;
         this.cargaEspecial = 7;
@@ -25,8 +25,8 @@ public class Zeus extends Deus {
     }
 
     @Override
-    public void atacar(Personagem oponente) {
-
+    public boolean atacar(Personagem oponente, Tabuleiro tabuleiro) {
+        return true;
     }
 
     @Override
@@ -34,8 +34,4 @@ public class Zeus extends Deus {
 
     }
 
-    @Override
-    public boolean movimento(int quantiaAandar, Tabuleiro tabuleiro, int ladoQueVai) {
-return  false;
-    }
 }
