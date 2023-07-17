@@ -1,5 +1,5 @@
 public class Zeus extends Deus {
-    public Zeus(){
+    public Zeus(int numero){
         this.vida = 200;
         this.ataque = 90;
         this.defesa = 0;
@@ -10,6 +10,7 @@ public class Zeus extends Deus {
         this.custo = 15;
         this.barraEspecial = 0;
         this.cargaEspecial = 7;
+        this.player = numero;
 
     }
 
@@ -29,12 +30,12 @@ public class Zeus extends Deus {
     }
 
     @Override
-    public void defender(int ataque) {
+    public void defender(Tabuleiro tabuleiro) {
 
     }
 
     @Override
-    public void movimento(int quantiaAandar, Tabuleiro tabuleiro, int ladoQueVai) {
-
+    public boolean movimento(int quantiaAandar, Tabuleiro tabuleiro, int ladoQueVai) {
+return  false;
     }
 }

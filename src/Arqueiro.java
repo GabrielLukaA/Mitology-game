@@ -1,7 +1,9 @@
+import java.util.ArrayList;
+
 public class Arqueiro extends Personagem {
 
 
-    public Arqueiro(){
+    public Arqueiro(int numero){
         this.vida = 100;
         this.ataque = 90;
         this.defesa = 20;
@@ -10,6 +12,7 @@ public class Arqueiro extends Personagem {
         this.nome = "Arqueiro";
         this.inGame = this.nome+" Vida:"+this.vida;
         this.custo = 2;
+        this.player = numero;
 
     }
 
@@ -17,74 +20,55 @@ public class Arqueiro extends Personagem {
     public void atacar(Personagem oponente) {
 
         int ataque = this.ataque - oponente.defesa;
-        oponente.defender(ataque);
+//        oponente.defender(ataque);
 
     }
 
     @Override
-    public void defender(int ataque) {
-       this.vida -= ataque;
-        if (this.vida <= 0){
+    public void defender(Tabuleiro tabuleiro) {
 
+
+    }
+
+    @Override
+ public boolean movimento(int quantiaAandar, Tabuleiro tabuleiro, int ladoQueVai) {
+    ArrayList<Posicao> posicoes = tabuleiro.getPosicoes();
+        int casa = 0;
+        for(int k=0;k<tabuleiro.getPosicoes().size();k++) {
+            if (tabuleiro.getPosicoes().get(k).getPersonagem()==this){
+                  casa = k;
+            }
         }
-
-    }
-
-    @Override
-    public void movimento(int quantiaAandar, Tabuleiro tabuleiro, int ladoQueVai) {
-        Personagem posicoes [][] = tabuleiro.getPosicoes();
-        for(int i=0;i<10;i++) {
-            for (int j = 0; j < 10; j++) {
-                if (posicoes[i][j] == this) {
-                    switch (ladoQueVai){
-                        case 0:
-                           posicoes[i][j] = null;
-                            System.out.println(i+quantiaAandar);
-                           posicoes[i+quantiaAandar][j] = this;
-                           i=11;
-                            j=11;
-                            break;
-                    }
+        System.out.println(ladoQueVai);
+        boolean oxi = true;
+    switch (ladoQueVai){
+        case 1:
+            System.out.println(this+ " o porra");
+            System.out.println(casa + " o caraio");
+           int ondeIr = casa -(10*quantiaAandar);
+            System.out.println("onde eu vou? "+ondeIr);
+            for (int i = casa-10; i != ondeIr; i=i-10) {
+                if (posicoes.get(i)!=null){
+                    oxi = false;
                     break;
                 }
             }
-        }
-    }
-
-    public void verificaMovimento(int ladoQueVai, Tabuleiro tabuleiro) {
-        Personagem[][] posicoes = tabuleiro.getPosicoes();
-
-    switch (ladoQueVai){
-        case 0:
-            for(int i=0;i<10;i++) {
-                for (int j = 0; j < 10; j++) {
-                    if (posicoes[i][j] == this) {
-                        for (int c = i+1; c < movimento+i+1; c++) {
-                            System.out.println(c);
-                            if (posicoes[c][j] == null) {
-                                possiveisMovimentosLinha.add(c);
-                                possiveisMovimentosColuna.add(j);
-                            } else {
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-            System.out.println(possiveisMovimentosLinha);
-            System.out.println(possiveisMovimentosColuna);
-           break;
-        case 1:
+            Posicao posicao = new Posicao();
+            posicao.setPersonagem(this);
+           Posicao antiga = tabuleiro.getPosicoes().get(casa);
+           antiga.setPersonagem(null);
+          Posicao nova =  tabuleiro.getPosicoes().get(ondeIr);
+          nova.setPersonagem(this);
             break;
-
         case 2:
             break;
-
         case 3:
             break;
-
+        case 4:
+            break;
     }
-    }
+    return oxi;
+       }
 
     @Override
     public String toString() {

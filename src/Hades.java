@@ -1,5 +1,5 @@
 public class Hades extends Deus{
-    public Hades(){
+    public Hades(int numero){
         this.vida = 200;
         this.ataque = 90;
         this.defesa = 0;
@@ -10,7 +10,7 @@ public class Hades extends Deus{
         this.custo = 15;
         this.barraEspecial = 0;
         this.cargaEspecial = 5;
-
+        this.player = numero;
     }
 
     @Override
@@ -29,12 +29,12 @@ public class Hades extends Deus{
     }
 
     @Override
-    public void defender(int ataque) {
+    public void defender(Tabuleiro tabuleiro) {
 
     }
 
     @Override
-    public void movimento(int quantiaAandar, Tabuleiro tabuleiro, int ladoQueVai) {
-
+    public boolean movimento(int quantiaAandar, Tabuleiro tabuleiro, int ladoQueVai) {
+        return  false;
     }
 }

@@ -1,6 +1,6 @@
 public class Centauro extends Personagem{
 
-    public Centauro(){
+    public Centauro(int numero){
         this.vida = 150;
         this.ataque = 70;
         this.defesa = 25;
@@ -9,6 +9,7 @@ public class Centauro extends Personagem{
         this.nome = "Centauro";
         this.inGame = this.nome+" Vida:"+this.vida;
         this.custo = 2;
+        this.player = numero;
 
     }
 
@@ -18,12 +19,12 @@ public class Centauro extends Personagem{
     }
 
     @Override
-    public void defender(int ataque) {
+    public void defender(Tabuleiro tabuleiro) {
 
     }
 
     @Override
-    public void movimento(int quantiaAandar, Tabuleiro tabuleiro, int ladoQueVai) {
-
+    public boolean movimento(int quantiaAandar, Tabuleiro tabuleiro, int ladoQueVai) {
+        return  false;
     }
 }
