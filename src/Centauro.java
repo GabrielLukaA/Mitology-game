@@ -13,10 +13,6 @@ public class Centauro extends Personagem {
 
     }
 
-    @Override
-    public boolean atacar(Personagem oponente, Tabuleiro tabuleiro) {
-return true;
-    }
 
     @Override
     public void defender(Tabuleiro tabuleiro) {

@@ -17,7 +17,136 @@ public abstract class Personagem {
     ArrayList<Integer> possiveisMovimentosLinha = new ArrayList<Integer>();
     ArrayList<Integer> possiveisMovimentosColuna = new ArrayList<Integer>();
 
-    public abstract boolean atacar(Personagem oponente, Tabuleiro tabuleiro);
+    public boolean atacar(Personagem oponente, Tabuleiro tabuleiro) {
+        int oponenteP = 0;
+        int meP = 0;
+        for (int i = 0; i < tabuleiro.getPosicoes().size(); i++) {
+            if (tabuleiro.getPosicoes().get(i).getPersonagem() == oponente) {
+                oponenteP = i;
+            }
+            if (tabuleiro.getPosicoes().get(i).getPersonagem() == this) {
+                meP = i;
+            }
+        }
+        for (int i = meP + (alcance * -10); meP > i; i += 10) {
+            System.out.println(i + " sou do for pra cima");
+            if (oponenteP == i) {
+                for (int l = meP - 10; l > oponenteP; l -= 10) {
+                    if (l <= 10) {
+                        return false;
+                    }
+                    if (tabuleiro.getPosicoes().get(l).getPersonagem() != null) {
+                        return false;
+                    }
+                    System.out.println("Ele quer atacar pra cima");
+                    break;
+                }
+                oponente.vida -= this.ataque;
+                System.out.println(oponente.vida);
+                if (oponente.vida <= 0) {
+                    for (int c = 0; c < tabuleiro.getPosicoes().size(); c++) {
+                        if (tabuleiro.getPosicoes().get(c).getPersonagem()==oponente){
+                            tabuleiro.getPosicoes().get(c).setPersonagem(null);
+                            System.out.println("Morto");
+                        }
+                    }
+
+                }
+//        oponente.defender(ataque);
+            }
+        }
+        for (int i = meP + (alcance * 10); meP < i; i -= 10) {
+            System.out.println(i + " sou do for pra baixo");
+            if (oponenteP == i) {
+                for (int l = meP + 10; l < oponenteP; l += 10) {
+                    if (l <= 10) {
+                        return false;
+                    }
+                    if (tabuleiro.getPosicoes().get(l).getPersonagem() != null) {
+                        return false;
+                    }
+                    System.out.println("Ele quer atacar pra baixo");
+                    break;
+                }
+                oponente.vida -= this.ataque;
+                System.out.println(oponente.vida);
+                if (oponente.vida <= 0) {
+                    for (int c = 0; c < tabuleiro.getPosicoes().size(); c++) {
+                        if (tabuleiro.getPosicoes().get(c).getPersonagem()==oponente){
+                            tabuleiro.getPosicoes().get(c).setPersonagem(null);
+                            System.out.println("Morto");
+                        }
+                    }
+
+                }
+            }
+
+//        oponente.defender(ataque);
+        }
+
+
+        for (int i = meP + alcance; meP < i; i -= 1) {
+            System.out.println(i + " sou do for pra direita");
+            if (oponenteP == i) {
+                for (int l = meP + 1; l < oponenteP; l += 1) {
+                    if ((l + 1) % 10 == 0) {
+                        return false;
+                    }
+                    if (tabuleiro.getPosicoes().get(l).getPersonagem() != null) {
+                        return false;
+                    }
+                    System.out.println("Ele quer atacar pra direita");
+                    break;
+                }
+                oponente.vida -= this.ataque;
+                System.out.println(oponente.vida);
+                if (oponente.vida <= 0) {
+                    for (int c = 0; c < tabuleiro.getPosicoes().size(); c++) {
+                        if (tabuleiro.getPosicoes().get(c).getPersonagem()==oponente){
+                            tabuleiro.getPosicoes().get(c).setPersonagem(null);
+                            System.out.println("Morto");
+                        }
+                    }
+
+                }
+            }
+
+//        oponente.defender(ataque);
+        }
+
+        for (int i = meP - alcance; meP > i; i += 1) {
+            System.out.println(i + " sou do for pra esquerda");
+            if (oponenteP == i) {
+                for (int l = meP - 1; l > oponenteP; l -= 1) {
+                    if (l % 10 == 0) {
+                        return false;
+                    }
+                    if (tabuleiro.getPosicoes().get(l).getPersonagem() != null) {
+                        return false;
+                    }
+                    System.out.println("Ele quer atacar pra esquerda");
+                    break;
+                }
+                oponente.vida -= this.ataque;
+                System.out.println(oponente.vida);
+                if (oponente.vida <= 0) {
+                    for (int c = 0; c < tabuleiro.getPosicoes().size(); c++) {
+                        if (tabuleiro.getPosicoes().get(c).getPersonagem()==oponente){
+                            tabuleiro.getPosicoes().get(c).setPersonagem(null);
+                            System.out.println("Morto");
+                        }
+                    }
+
+                }
+            }
+
+//        oponente.defender(ataque);
+        }
+
+
+        return true;
+
+    }
 
     public abstract void defender(Tabuleiro tabuleiro);
 
@@ -45,7 +174,7 @@ public abstract class Personagem {
                     if (i<=10){
                         return false;
                     }
-                    if (posicoes.get(i) != null) {
+                    if (posicoes.get(i).getPersonagem() != null) {
                         oxi = false;
                         break;
                     }
@@ -70,7 +199,7 @@ public abstract class Personagem {
                     if (i>=91){
                         return false;
                     }
-                    if (posicoes.get(i) != null) {
+                    if (posicoes.get(i).getPersonagem() != null) {
                         oxi = false;
                         break;
                     }
@@ -94,9 +223,8 @@ public abstract class Personagem {
 
                     }
 //                    if ((casa-quantiaAandar+1)%10==0)
-                    if (posicoes.get(i) != null) {
-                        oxi = false;
-                        break;
+                    if (posicoes.get(i).getPersonagem() != null) {
+                        return false;
                     }
                 }
                 posicao = new Posicao();
@@ -111,22 +239,30 @@ public abstract class Personagem {
                 System.out.println(casa + " o caraio");
                 ondeIr = casa + quantiaAandar;
                 System.out.println("onde eu vou? " + ondeIr);
+                if (posicoes.get(ondeIr).getPersonagem()!=null){
+                    return false;
+                }
 
                 for (int i = casa + 1; i < ondeIr; i += 1) {
                     if ((i + 1) % 10 == 0) {
-                            return false;
+                            oxi = false;
 
                     }
-                    if (posicoes.get(i) != null) {
-                        break;
+                    System.out.println("oi"+ posicoes.get(i).getPersonagem()+" meudeus "+ i);
+                    if (posicoes.get(i).getPersonagem() != null) {
+                        System.out.println("Entrei aq");
+                        oxi = false;
                     }
                 }
-                posicao = new Posicao();
-                posicao.setPersonagem(this);
-                antiga = tabuleiro.getPosicoes().get(casa);
-                antiga.setPersonagem(null);
-                nova = tabuleiro.getPosicoes().get(ondeIr);
-                nova.setPersonagem(this);
+                if (oxi){
+                    posicao = new Posicao();
+                    posicao.setPersonagem(this);
+                    antiga = tabuleiro.getPosicoes().get(casa);
+                    antiga.setPersonagem(null);
+                    nova = tabuleiro.getPosicoes().get(ondeIr);
+                    nova.setPersonagem(this);
+                }
+
                 break;
         }
         return oxi;

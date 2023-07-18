@@ -26,11 +26,6 @@ public class Poseidon extends Deus {
     }
 
     @Override
-    public boolean atacar(Personagem oponente,Tabuleiro tabuleiro) {
-        return true;
-    }
-
-    @Override
     public void defender(Tabuleiro tabuleiro) {
 
     }
