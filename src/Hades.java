@@ -1,9 +1,10 @@
 public class Hades extends Deus {
     public Hades(int numero) {
-        this.vida = 200;
-        this.ataque = 90;
+        this.vida = 175;
+        this.vidaMax=175;
+        this.ataque = 110;
         this.defesa = 0;
-        this.alcance = 3;
+        this.alcance = 1;
         this.movimento = 4;
         this.nome = "Hades";
         this.inGame = this.nome + " Vida:" + this.vida;
@@ -23,9 +24,4 @@ public class Hades extends Deus {
 
     }
 
-
-    @Override
-    public void defender(Tabuleiro tabuleiro) {
-
-    }
 }

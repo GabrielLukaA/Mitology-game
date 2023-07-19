@@ -7,6 +7,8 @@ public abstract class Personagem {
     int alcance;
     int movimento;
     int custo;
+
+    int vidaMax;
     String nome;
     String inGame;
 
@@ -153,7 +155,12 @@ public abstract class Personagem {
 
     }
 
-    public abstract void defender(Tabuleiro tabuleiro);
+    public  void defender(Tabuleiro tabuleiro){
+        this.vida+=vidaMax/100*15;
+        if (this.vida>vidaMax){
+            this.vida=vidaMax;
+        }
+    }
 
     public boolean mover(int quantiaAandar, Tabuleiro tabuleiro, int ladoQueVai) {
 

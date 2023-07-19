@@ -1,6 +1,7 @@
 public class Zeus extends Deus {
     public Zeus(int numero) {
         this.vida = 200;
+        this.vidaMax = 200;
         this.ataque = 90;
         this.defesa = 0;
         this.alcance = 3;
@@ -23,10 +24,4 @@ public class Zeus extends Deus {
     public void realizarEspecial() {
 
     }
-
-    @Override
-    public void defender(Tabuleiro tabuleiro) {
-
-    }
-
 }

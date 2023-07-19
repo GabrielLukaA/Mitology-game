@@ -80,29 +80,29 @@ public class Main {
                 "então apenas nos diga onde deseja alocar a sua peça, Ok?");
         posicionarPecas(jogador1);
         posicionarPecas(jogador2);
-do {
-    if (sorteio==0){
-        jogador1.mortos+= realizarJogada(jogador1);
-        jogador2.mortos+= realizarJogada(jogador2);
-    } else {
-        jogador1.mortos+= realizarJogada(jogador2);
-        jogador2.mortos+= realizarJogada(jogador1);
-    }
+        do {
+            if (sorteio == 0) {
+                jogador1.mortos += realizarJogada(jogador1);
+                jogador2.mortos += realizarJogada(jogador2);
+            } else {
+                jogador1.mortos += realizarJogada(jogador2);
+                jogador2.mortos += realizarJogada(jogador1);
+            }
 
-} while (jogador1.mortos<jogador1.personagensEscolhidos.size() || jogador2.mortos<jogador2.personagensEscolhidos.size() );
-        System.out.println("Personagens player 1:"+jogador1.personagensEscolhidos.size());
-        System.out.println("Personagens player 2:"+jogador2.personagensEscolhidos.size());
- if (jogador1.mortos == jogador1.personagensEscolhidos.size()){
-     System.out.println("Vitória do jogador "+jogador1.nome+"! Parabéns.");
- } else {
-     System.out.println("Vitória do jogador "+jogador2.nome+"! Parabéns.");
- }
+        } while (jogador1.mortos < jogador1.personagensEscolhidos.size() && jogador2.mortos < jogador2.personagensEscolhidos.size());
+        System.out.println("Personagens player 1:" + jogador1.personagensEscolhidos.size());
+        System.out.println("Personagens player 2:" + jogador2.personagensEscolhidos.size());
+        if (jogador1.mortos == jogador1.personagensEscolhidos.size()) {
+            System.out.println("Vitória do jogador " + jogador2.nome + "! Parabéns.");
+        } else {
+            System.out.println("Vitória do jogador " + jogador1.nome + "! Parabéns.");
+        }
 
 
     }
 
     private static int realizarJogada(Jogador jogador) {
-        int mortosNoRound=0;
+        int mortosNoRound = 0;
         int nLances = 3;
 
         do {
@@ -111,30 +111,30 @@ do {
             printarTabuleiro();
             int pecaAMexer = sc.nextInt() - 1;
             Personagem personagemAcao = tabuleiro.getPosicoes().get(pecaAMexer).getPersonagem();
-            if (personagemAcao.player == jogador.numero){
+            if (personagemAcao.player == jogador.numero) {
                 System.out.println("Você selecionou o " + personagemAcao.nome + "o que deseja fazer com ele?");
                 System.out.println("""
-                    1 - Mover
-                    2 - Atacar
-                    3 - Defender
-                    """);
+                        1 - Mover
+                        2 - Atacar
+                        3 - Defender
+                        """);
                 int escolhaMovimento = sc.nextInt();
                 switch (escolhaMovimento) {
                     case 1:
                         System.out.println("Seu personagem tem " + personagemAcao.movimento + " de movimento, para que lado deseja ir?");
                         System.out.println("""
-                            1- Para cima
-                            2 - Para baixo
-                            3 - Para a esquerda
-                            4 - Para a direita
-                                                        
-                            Importante lembrar que essa ótica é sempre de baixo para cima, então se você está em cima no mapa e deseja\n
-                             avançar, é necessário que escolha ir para baixo.
-                            """);
+                                1- Para cima
+                                2 - Para baixo
+                                3 - Para a esquerda
+                                4 - Para a direita
+                                                            
+                                Importante lembrar que essa ótica é sempre de baixo para cima, então se você está em cima no mapa e deseja\n
+                                 avançar, é necessário que escolha ir para baixo.
+                                """);
                         int ladoQueVai = sc.nextInt();
                         System.out.println("Quantas casas? Lembre-se de que você não pode ir para uma casa que já tenha algum personagem");
                         int quantiaAAndader = sc.nextInt();
-                        if (personagemAcao.mover(quantiaAAndader, tabuleiro, ladoQueVai)){
+                        if (personagemAcao.mover(quantiaAAndader, tabuleiro, ladoQueVai)) {
                             nLances--;
                         } else {
                             System.out.println("Seu movimento não foi válido.");
@@ -144,9 +144,9 @@ do {
                         System.out.println("Informe a peça que deseja atacar");
                         int pecaAAtacar = sc.nextInt() - 1;
                         Personagem personagemAtacado = tabuleiro.getPosicoes().get(pecaAAtacar).getPersonagem();
-                        if (personagemAtacado == null){
+                        if (personagemAtacado == null) {
                             System.out.println("Não existe nenhuma peça nessa posição");
-                        } else if (personagemAtacado.player == jogador.numero){
+                        } else if (personagemAtacado.player == jogador.numero) {
                             System.out.println("Não é possível atacar uma peça aliada.");
                         } else {
                             mortosNoRound = personagemAcao.atacar(personagemAtacado, tabuleiro);
@@ -154,6 +154,8 @@ do {
                         }
                         break;
                     case 3:
+                        personagemAcao.defender(tabuleiro);
+                        nLances--;
                         break;
 
                 }
@@ -161,9 +163,9 @@ do {
             } else {
                 System.out.println("Você selecionou uma peça do adversário ou um local sem peças.");
             }
-            } while (nLances > 0);
+        } while (nLances > 0);
 
-return mortosNoRound;
+        return mortosNoRound;
 
     }
 

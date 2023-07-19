@@ -2,6 +2,7 @@ public class Centauro extends Personagem {
 
     public Centauro(int numero) {
         this.vida = 150;
+        this.vidaMax=150;
         this.ataque = 70;
         this.defesa = 25;
         this.alcance = 1;
@@ -13,9 +14,4 @@ public class Centauro extends Personagem {
 
     }
 
-
-    @Override
-    public void defender(Tabuleiro tabuleiro) {
-
-    }
 }
