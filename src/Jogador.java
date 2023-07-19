@@ -10,7 +10,8 @@ public class Jogador {
 
     int mortos;
     ArrayList<Personagem> personagensEscolhidos;
-    public Jogador (String nome, int numero, int casasInicio, int casasFinal){
+
+    public Jogador(String nome, int numero, int casasInicio, int casasFinal) {
         this.nome = nome;
         this.elixir = 50;
         this.numero = numero;

@@ -12,9 +12,15 @@ public class Posicao {
     @Override
     public String toString() {
         if (this.personagem == null){
-            return " ";
+            return "             ";
         }
         String letra = personagem.nome.substring(0, 1);
-        return letra;
+        String vida = personagem.vida+"";
+        if (personagem.vida<10){
+            vida = "00"+personagem.vida;
+        } else if (personagem.vida<100){
+            vida = "0"+personagem.vida;
+        }
+        return letra+" - "+personagem.player+" V - "+vida;
     }
 }

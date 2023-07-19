@@ -29,7 +29,12 @@ public class Main {
                     infoPersonagens();
                     break;
                 case 3:
-                    System.out.println("O jogo...");
+                    System.out.println("""
+                             O jogo consiste básicamente em uma guerra estratégica, onde seu objetivo é eliminar todas as tropas inimigas para sair com a vitória.
+                             Suas peças são identificadas no game pela primeira letra, seguida do número do jogador a quem ela pertence, e por fim possui-se um V - "quantiaDeVida"
+                             é assim que aparecerá no seu tabuleiro cada peça, recomendo que entre na aba "conhecer os personagens" para saber os artibutos de todos os personagens.
+                             Desejamos que tenha uma grande diversão e saia vitorioso nas guerras.
+                            """);
                     break;
                 case 4:
                     System.exit(0);
@@ -50,22 +55,21 @@ public class Main {
     private static void game() {
         System.out.println("Primeiramente, nos dê seus nomes para que seja iniciado um grande jogo.");
         System.out.println("Jogador 1: ");
-        Jogador jogador1 = new Jogador(sc.next(), 1, 0, 20);
+        Jogador jogador1 = new Jogador(sc.next(), 1, 1, 20);
         System.out.println("Jogador 2: ");
-        Jogador jogador2 = new Jogador(sc.next(), 2, 80, 99);
+        Jogador jogador2 = new Jogador(sc.next(), 2, 81, 100);
         Random escolhePlayer = new Random();
         System.out.print("Bom, agora que conhecemos os jogadores é a hora de escolher que irá"
-                + "começar o jogo, nós escolhemos na sorte que quem começará, e o escolhido foi:  ");
+                + "começar o jogo, nós escolhemos na sorte que quem começará, e o escolhido foi:  \n");
         int sorteio = escolhePlayer.nextInt(2);
-        System.out.println(sorteio);
         String nomeDoQueInicia;
         if (sorteio == 0) {
             nomeDoQueInicia = jogador1.nome;
         } else {
             nomeDoQueInicia = jogador2.nome;
         }
-        System.out.println(nomeDoQueInicia + "Você foi o escolhido para começar, tanto começar o jogo, como" +
-                "pelo lado negativo, você escolherá seu esquadrão antecipadamente");
+        System.out.println(nomeDoQueInicia + ", você foi o escolhido para começar, tanto começar o jogo, como" +
+                "pelo lado negativo, você escolherá seu esquadrão antecipadamente.");
         switch (sorteio) {
             case 0:
                 escolhePersonagens(jogador1);
@@ -82,37 +86,47 @@ public class Main {
         posicionarPecas(jogador2);
         do {
             if (sorteio == 0) {
-                jogador1.mortos += realizarJogada(jogador1);
-                jogador2.mortos += realizarJogada(jogador2);
+                realizarJogada(jogador1, jogador2);
+                if (jogador2.mortos == jogador2.personagensEscolhidos.size()) {
+                    System.out.println("Vitória do jogador " + jogador1.nome + "! Parabéns.\n\n\n");
+                }
+                realizarJogada(jogador2, jogador1);
+                if (jogador1.mortos == jogador1.personagensEscolhidos.size()) {
+                    System.out.println("Vitória do jogador " + jogador2.nome + "! Parabéns.\n\n\n");
+                }
+
             } else {
-                jogador1.mortos += realizarJogada(jogador2);
-                jogador2.mortos += realizarJogada(jogador1);
+                realizarJogada(jogador2, jogador1);
+                if (jogador1.mortos == jogador1.personagensEscolhidos.size()) {
+                    System.out.println("Vitória do jogador " + jogador2.nome + "! Parabéns.\n\n\n");
+                }
+                realizarJogada(jogador1, jogador2);
+                if (jogador2.mortos == jogador2.personagensEscolhidos.size()) {
+                    System.out.println("Vitória do jogador " + jogador1.nome + "! Parabéns.\n\n\n");
+                }
+
             }
 
         } while (jogador1.mortos < jogador1.personagensEscolhidos.size() && jogador2.mortos < jogador2.personagensEscolhidos.size());
-        System.out.println("Personagens player 1:" + jogador1.personagensEscolhidos.size());
-        System.out.println("Personagens player 2:" + jogador2.personagensEscolhidos.size());
-        if (jogador1.mortos == jogador1.personagensEscolhidos.size()) {
-            System.out.println("Vitória do jogador " + jogador2.nome + "! Parabéns.");
-        } else {
-            System.out.println("Vitória do jogador " + jogador1.nome + "! Parabéns.");
-        }
-
 
     }
 
-    private static int realizarJogada(Jogador jogador) {
+    private static int realizarJogada(Jogador jogador, Jogador adversario) {
         int mortosNoRound = 0;
+        String mortosNaJogada = "";
         int nLances = 3;
 
         do {
+            System.out.println("Todas as peças que possuem o número " + jogador.numero + " são suas " + jogador.nome);
+            System.out.println("Você tem " + nLances + " lance(s), informe a posição da peça que deseja utilizar para o  lance?");
 
-            System.out.println("Você tem " + nLances + " lances, informe a posição da peça que deseja utilizar para o seu primeiro lance?");
             printarTabuleiro();
             int pecaAMexer = sc.nextInt() - 1;
             Personagem personagemAcao = tabuleiro.getPosicoes().get(pecaAMexer).getPersonagem();
-            if (personagemAcao.player == jogador.numero) {
-                System.out.println("Você selecionou o " + personagemAcao.nome + "o que deseja fazer com ele?");
+            if (personagemAcao == null) {
+                System.out.println("Não existem peças nesse local");
+            } else if (personagemAcao.player == jogador.numero) {
+                System.out.println("Você selecionou o " + personagemAcao.nome + ", o que deseja fazer com ele?");
                 System.out.println("""
                         1 - Mover
                         2 - Atacar
@@ -121,20 +135,21 @@ public class Main {
                 int escolhaMovimento = sc.nextInt();
                 switch (escolhaMovimento) {
                     case 1:
-                        System.out.println("Seu personagem tem " + personagemAcao.movimento + " de movimento, para que lado deseja ir?");
+                        System.out.println("Seu personagem tem " + personagemAcao.movimento + " de capacidade de movimento, para que lado deseja ir?");
                         System.out.println("""
                                 1- Para cima
                                 2 - Para baixo
                                 3 - Para a esquerda
                                 4 - Para a direita
                                                             
-                                Importante lembrar que essa ótica é sempre de baixo para cima, então se você está em cima no mapa e deseja\n
-                                 avançar, é necessário que escolha ir para baixo.
+                                Importante lembrar que essa ótica é sempre de baixo para cima, então se você está em cima no mapa e deseja avançar, é necessário que escolha ir para baixo.
                                 """);
                         int ladoQueVai = sc.nextInt();
                         System.out.println("Quantas casas? Lembre-se de que você não pode ir para uma casa que já tenha algum personagem");
-                        int quantiaAAndader = sc.nextInt();
-                        if (personagemAcao.mover(quantiaAAndader, tabuleiro, ladoQueVai)) {
+                        int quantiaAAndar = sc.nextInt();
+                        if (quantiaAAndar > personagemAcao.movimento) {
+                            System.out.println("A capacidade de movimento é inferior à quantia que você deseja andar");
+                        } else if (personagemAcao.mover(quantiaAAndar, tabuleiro, ladoQueVai)) {
                             nLances--;
                         } else {
                             System.out.println("Seu movimento não foi válido.");
@@ -149,8 +164,23 @@ public class Main {
                         } else if (personagemAtacado.player == jogador.numero) {
                             System.out.println("Não é possível atacar uma peça aliada.");
                         } else {
-                            mortosNoRound = personagemAcao.atacar(personagemAtacado, tabuleiro);
-                            nLances--;
+                            mortosNaJogada = personagemAcao.atacar(personagemAtacado, tabuleiro, adversario);
+                            System.out.println("Mortos na jogada = " + mortosNaJogada);
+                            if (mortosNaJogada == "não dá") {
+                                System.out.println("Tem alguma peça no seu caminho, elimine ela primeiro.");
+                            } else if (mortosNaJogada == "bateu") {
+                                System.out.println("Golpe aplicado com sucesso");
+                                nLances--;
+                            } else if (mortosNaJogada == "finishGame") {
+                                nLances = 0;
+                            } else if (mortosNaJogada == "ataque na diagonal") {
+                                System.out.println("Você tentou realizar um ataque na diagonal, ou tentou atacar uma pea que não está no seu alcance");
+                            } else {
+                                System.out.println("Você matou uma tropa inimiga, parabéns.");
+                                nLances--;
+                                mortosNoRound += Integer.parseInt(mortosNaJogada);
+                                System.out.println("Mortos no round até então = " + mortosNoRound);
+                            }
                         }
                         break;
                     case 3:
@@ -161,7 +191,7 @@ public class Main {
                 }
 
             } else {
-                System.out.println("Você selecionou uma peça do adversário ou um local sem peças.");
+                System.out.println("Você selecionou uma peça do adversário.");
             }
         } while (nLances > 0);
 
@@ -171,7 +201,7 @@ public class Main {
 
     private static void posicionarPecas(Jogador jogador) {
         for (int i = 0; i < jogador.personagensEscolhidos.size(); i++) {
-            System.out.println("Suas casas disponíveis para posicionar suas peças são de " + jogador.casasInicio + " até " + jogador.casasFinal);
+            System.out.println(jogador.nome + ", suas casas disponíveis para posicionar suas peças são de " + jogador.casasInicio + " até " + jogador.casasFinal);
             System.out.println("Onde você deseja posicionar seu: " + jogador.personagensEscolhidos.get(i).nome + "?");
             for (int j = 0; j < 100; j++) {
                 if ((j + 1) % 10 == 0) {
@@ -195,7 +225,7 @@ public class Main {
                 }
             }
             int escolhaPosicao = sc.nextInt() - 1;
-            if (escolhaPosicao < jogador.casasInicio || i > jogador.casasFinal) {
+            if (escolhaPosicao < jogador.casasInicio - 1 || escolhaPosicao > jogador.casasFinal - 1) {
                 System.out.println("Escolha uma casa válida.");
                 i--;
             } else {
@@ -216,7 +246,7 @@ public class Main {
         Deus poseidonSelecao = new Poseidon(0);
         int deuses = 0;
 
-        System.out.println("Você tem direito a jogar com um Deus de sua escolha: ");
+        System.out.println(jogador.nome + ", você tem direito a jogar com um Deus de sua escolha: ");
         System.out.println("1 - Zeus, custo: " + zeusSelecao.custo);
         System.out.println("2 - Hades, custo: " + hadesSelecao.custo);
         System.out.println("3 - Poseidon, custo: " + poseidonSelecao.custo);
@@ -243,8 +273,8 @@ public class Main {
                 break;
         }
         do {
-            System.out.println("Você possuí no momento " + jogador.elixir);
-            System.out.println("Escolha o personagem que você deseja adicionar ao seu exército");
+            System.out.println("Caro(a) " + jogador.nome + ", você possuí no momento " + jogador.elixir + " de elixir.");
+            System.out.println("Escolha o personagem que você deseja adicionar ao seu exército:");
             System.out.println("1 - Arqueiro, custo: " + arqueiroSelecao.custo);
             System.out.println("2 - Centauro, custo: " + centauroSelecao.custo);
             System.out.println("3 - Ninfa do Bosque, custo: " + ninfaDoBosqueSelecao.custo);
@@ -269,13 +299,14 @@ public class Main {
                     break;
                 case 0:
                     System.out.println("Jogo encerrado.");
+                    System.exit(0);
                     break;
 
 
             }
         } while (jogador.elixir >= 2);
 
-        System.out.println("Sua escolha de personagens foi realizada");
+        System.out.println("Sua escolha de personagens foi realizada. Boa sorte " + jogador.nome + "!\n\n");
     }
 
     private static void infoPersonagens() {
@@ -292,28 +323,22 @@ public class Main {
         int opcaoPersonagem = sc.nextInt();
         switch (opcaoPersonagem) {
             case 1:
-                Arqueiro arqueiroInfo = new Arqueiro(0);
-                System.out.println("Sobre o arqueiro podemos lhe informar que ele possuí:\n" +
-                        arqueiroInfo.vida + " de vida.\n" +
-                        arqueiroInfo.alcance + " de alcance de ataque, sendo até 2 para o dano primário e até 4 para" +
-                        "o dano secundário."
-                        + arqueiroInfo.ataque + " de ataque em uma curta distancia" +
-                        ", tendo esse dano reduzido em 40% quando em uma maior distancia, ou seja"
-                        + (arqueiroInfo.ataque / 100 * 60) + " de dano secundário.\n" +
-                        arqueiroInfo.movimento + " de capacidade de movimento.\n" +
-                        arqueiroInfo.defesa + " de defesa." +
-                        "\n\nO Arqueiro custa para ser colocado ao seu lado no campo de batalha " + arqueiroInfo.custo + " de elixir."
-                );
+                mostrarInfo(new Arqueiro(0));
                 break;
             case 2:
+                mostrarInfo(new Centauro(0));
                 break;
             case 3:
+                mostrarInfo(new NinfaDoBosque(0));
                 break;
             case 4:
+                mostrarInfo(new Zeus(0));
                 break;
             case 5:
+                mostrarInfo(new Poseidon(0));
                 break;
             case 6:
+                mostrarInfo(new Hades(0));
                 break;
             case 7:
                 break;
@@ -322,6 +347,17 @@ public class Main {
                 break;
 
         }
+    }
+
+    private static void mostrarInfo(Personagem personagem) {
+        System.out.println("Sobre o " + personagem.nome + " podemos lhe informar que ele possuí:\n" +
+                personagem.vida + " de vida.\n" +
+                personagem.alcance + " de alcance de ataque.\n"
+                + personagem.ataque + " de ataque .\n" +
+                personagem.movimento + " de capacidade de movimento.\n" +
+                personagem.defesa + " de defesa." +
+                "\n\nO " + personagem.nome + " custa para ser colocado ao seu lado no campo de batalha " + personagem.custo + " de elixir.\n\n"
+        );
     }
 
     public static void printarTabuleiro() {
