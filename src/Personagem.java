@@ -17,7 +17,8 @@ public abstract class Personagem {
     ArrayList<Integer> possiveisMovimentosLinha = new ArrayList<Integer>();
     ArrayList<Integer> possiveisMovimentosColuna = new ArrayList<Integer>();
 
-    public boolean atacar(Personagem oponente, Tabuleiro tabuleiro) {
+    public int atacar(Personagem oponente, Tabuleiro tabuleiro) {
+        int mortos=0;
         int oponenteP = 0;
         int meP = 0;
         for (int i = 0; i < tabuleiro.getPosicoes().size(); i++) {
@@ -33,10 +34,10 @@ public abstract class Personagem {
             if (oponenteP == i) {
                 for (int l = meP - 10; l > oponenteP; l -= 10) {
                     if (l <= 10) {
-                        return false;
+                        return 0;
                     }
                     if (tabuleiro.getPosicoes().get(l).getPersonagem() != null) {
-                        return false;
+                        return 0;
                     }
                     System.out.println("Ele quer atacar pra cima");
                     break;
@@ -48,6 +49,7 @@ public abstract class Personagem {
                         if (tabuleiro.getPosicoes().get(c).getPersonagem()==oponente){
                             tabuleiro.getPosicoes().get(c).setPersonagem(null);
                             System.out.println("Morto");
+                            mortos++;
                         }
                     }
 
@@ -60,10 +62,10 @@ public abstract class Personagem {
             if (oponenteP == i) {
                 for (int l = meP + 10; l < oponenteP; l += 10) {
                     if (l <= 10) {
-                        return false;
+                        return 0;
                     }
                     if (tabuleiro.getPosicoes().get(l).getPersonagem() != null) {
-                        return false;
+                        return 0;
                     }
                     System.out.println("Ele quer atacar pra baixo");
                     break;
@@ -75,6 +77,7 @@ public abstract class Personagem {
                         if (tabuleiro.getPosicoes().get(c).getPersonagem()==oponente){
                             tabuleiro.getPosicoes().get(c).setPersonagem(null);
                             System.out.println("Morto");
+                            mortos++;
                         }
                     }
 
@@ -90,10 +93,10 @@ public abstract class Personagem {
             if (oponenteP == i) {
                 for (int l = meP + 1; l < oponenteP; l += 1) {
                     if ((l + 1) % 10 == 0) {
-                        return false;
+                        return 0;
                     }
                     if (tabuleiro.getPosicoes().get(l).getPersonagem() != null) {
-                        return false;
+                        return 0;
                     }
                     System.out.println("Ele quer atacar pra direita");
                     break;
@@ -105,6 +108,7 @@ public abstract class Personagem {
                         if (tabuleiro.getPosicoes().get(c).getPersonagem()==oponente){
                             tabuleiro.getPosicoes().get(c).setPersonagem(null);
                             System.out.println("Morto");
+                            mortos++;
                         }
                     }
 
@@ -119,10 +123,10 @@ public abstract class Personagem {
             if (oponenteP == i) {
                 for (int l = meP - 1; l > oponenteP; l -= 1) {
                     if (l % 10 == 0) {
-                        return false;
+                        return 0;
                     }
                     if (tabuleiro.getPosicoes().get(l).getPersonagem() != null) {
-                        return false;
+                        return 0;
                     }
                     System.out.println("Ele quer atacar pra esquerda");
                     break;
@@ -134,6 +138,7 @@ public abstract class Personagem {
                         if (tabuleiro.getPosicoes().get(c).getPersonagem()==oponente){
                             tabuleiro.getPosicoes().get(c).setPersonagem(null);
                             System.out.println("Morto");
+                            mortos++;
                         }
                     }
 
@@ -144,7 +149,7 @@ public abstract class Personagem {
         }
 
 
-        return true;
+        return mortos;
 
     }
 

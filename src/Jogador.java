@@ -7,6 +7,8 @@ public class Jogador {
     int numero;
     int casasInicio;
     int casasFinal;
+
+    int mortos;
     ArrayList<Personagem> personagensEscolhidos;
     public Jogador (String nome, int numero, int casasInicio, int casasFinal){
         this.nome = nome;
@@ -14,6 +16,7 @@ public class Jogador {
         this.numero = numero;
         this.casasInicio = casasInicio;
         this.casasFinal = casasFinal;
+        this.mortos = 0;
         this.personagensEscolhidos = new ArrayList<>();
     }
 }
