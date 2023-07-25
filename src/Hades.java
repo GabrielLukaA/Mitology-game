@@ -1,21 +1,17 @@
 public class Hades extends Deus {
     public Hades(int numero) {
-        this.vida = 175;
-        this.vidaMax=175;
-        this.ataque = 110;
-        this.defesa = 0;
-        this.alcance = 1;
-        this.movimento = 4;
-        this.nome = "Hades";
-        this.inGame = this.nome + " Vida:" + this.vida;
-        this.custo = 15;
-        this.barraEspecial = 0;
-        this.cargaEspecial = 5;
-        this.player = numero;
-    }
 
-    @Override
-    public void carregarEspecial() {
+        this.setVida(175);
+        this.setVidaMax(175);
+        this.setAtaque(110);
+        this.setDefesa(0);
+        this.setAlcance(1);
+        this.setMovimento(4);
+        this.setNome("Hades");
+        this.setCusto(15);
+        this.setPlayer(numero);
+        this.setBarraEspecial(0);
+        this.setCargaEspecial(5);
 
     }
 

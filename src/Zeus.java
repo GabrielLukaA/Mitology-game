@@ -1,23 +1,17 @@
 public class Zeus extends Deus {
     public Zeus(int numero) {
-        this.vida = 200;
-        this.vidaMax = 200;
-        this.ataque = 90;
-        this.defesa = 0;
-        this.alcance = 3;
-        this.movimento = 4;
-        this.nome = "Zeus";
-        this.inGame = this.nome + " Vida:" + this.vida;
-        this.custo = 15;
-        this.barraEspecial = 0;
-        this.cargaEspecial = 7;
-        this.player = numero;
 
-    }
-
-    @Override
-    public void carregarEspecial() {
-
+        this.setVida(200);
+        this.setVidaMax(200);
+        this.setAtaque(90);
+        this.setDefesa(0);
+        this.setAlcance(3);
+        this.setMovimento(4);
+        this.setNome("Zeus");
+        this.setCusto(15);
+        this.setPlayer(numero);
+        this.setBarraEspecial(0);
+        this.setCargaEspecial(7);
     }
 
     @Override

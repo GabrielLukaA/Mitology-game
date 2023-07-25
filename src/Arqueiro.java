@@ -4,29 +4,62 @@ public class Arqueiro extends Personagem {
 
 
     public Arqueiro(int numero) {
-        this.vida = 100;
-        this.vidaMax = 100;
-        this.ataque = 90;
-        this.defesa = 20;
-        this.alcance = 3;
-        this.movimento = 4;
-        this.nome = "Arqueiro";
-        this.inGame = this.nome + " Vida:" + this.vida;
-        this.custo = 2;
-        this.player = numero;
+        this.setVida(100);
+        this.setVidaMax(100);
+        this.setAtaque(90);
+        this.setDefesa(20);
+        this.setAlcance(3);
+        this.setMovimento(4);
+        this.setNome("Arqueiro");
+        this.setCusto(2);
+        this.setPlayer(numero);
 
     }
-
-
     @Override
-    public String toString() {
-        return "Arqueiro{" +
-                "vida=" + vida +
-                ", ataque=" + ataque +
-                ", defesa=" + defesa +
-                ", alcance=" + alcance +
-                ", movimento=" + movimento +
-                ", nome='" + nome + '\'' +
-                '}';
+    public boolean defender(Tabuleiro tabuleiro) {
+        int semCura = 0;
+        ArrayList<Posicao> posicoes = tabuleiro.getPosicoes();
+        Personagem aSerCurado = null;
+        int indexPersonagem = 0;
+
+        for (Posicao posicao : posicoes) {
+            if (posicao.getPersonagem() == this) {
+                indexPersonagem = tabuleiro.getPosicoes().indexOf(posicao);
+            }
+        }
+        if (indexPersonagem >= 10 && indexPersonagem <= 89) {
+            if (posicoes.get(indexPersonagem + 10).getPersonagem() != null) {
+                aSerCurado = posicoes.get(indexPersonagem + 10).getPersonagem();
+                aSerCurado.setVida(aSerCurado.getVida() + aSerCurado.getVidaMax() / 100 * 10);
+            } else {
+                semCura++;
+            }
+            if (posicoes.get(indexPersonagem - 10).getPersonagem() != null) {
+                aSerCurado = posicoes.get(indexPersonagem - 10).getPersonagem();
+                aSerCurado.setVida(aSerCurado.getVida() + aSerCurado.getVidaMax() / 100 * 10);
+            } else {
+                semCura++;
+            }
+        } else if (indexPersonagem < 10) {
+            if (posicoes.get(indexPersonagem + 10).getPersonagem() != null) {
+                aSerCurado = posicoes.get(indexPersonagem + 10).getPersonagem();
+                aSerCurado.setVida(aSerCurado.getVida() + aSerCurado.getVidaMax() / 100 * 10);
+            } else {
+                return false;
+            }
+        } else if (indexPersonagem > 89) {
+            if (posicoes.get(indexPersonagem - 10).getPersonagem() != null) {
+                aSerCurado = posicoes.get(indexPersonagem - 10).getPersonagem();
+                aSerCurado.setVida(aSerCurado.getVida() + aSerCurado.getVidaMax() / 100 * 10);
+            } else {
+                return false;
+            }
+        }
+
+
+        if (semCura == 2) {
+            return false;
+        }
+        return true;
     }
 }
