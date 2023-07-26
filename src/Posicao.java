@@ -1,3 +1,5 @@
+import java.text.DecimalFormat;
+
 public class Posicao {
     private Personagem personagem;
 
@@ -11,16 +13,19 @@ public class Posicao {
 
     @Override
     public String toString() {
-        if (this.personagem == null){
-            return "             ";
+        DecimalFormat formato = new DecimalFormat("#0.0");
+        if (this.personagem == null) {
+            return "               ";
         }
         String letra = personagem.getNome().substring(0, 1);
-        String vida = personagem.getVida()+"";
-        if (personagem.getVida()<10){
-            vida = "00"+personagem.getVida();
-        } else if (personagem.getVida()<100){
-            vida = "0"+personagem.getVida();
+        String vida = formato.format(personagem.getVida()) + "";
+        if (personagem.getVida() < 10) {
+            String formatada = formato.format(personagem.getVida());
+            vida = "00" + formatada;
+        } else if (personagem.getVida() < 100) {
+            String formatada = formato.format(personagem.getVida());
+            vida = "0" + formatada;
         }
-        return letra+" - "+personagem.getPlayer()+" V - "+vida;
+        return letra + " - " + personagem.getPlayer() + " V - " + vida;
     }
 }

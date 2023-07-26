@@ -14,6 +14,7 @@ public class Main {
     }
 
     private static void menuInicial() {
+
         System.out.println("""
                 Bem vindo a sua tela inicial, o que deseja realizar?
                                     
@@ -23,29 +24,57 @@ public class Main {
                 4 - Encerrar aplicação
                 """);
         int opcaoInicio = sc.nextInt();
+
         switch (opcaoInicio) {
             case 1:
                 game();
                 break;
+
             case 2:
                 infoPersonagens();
                 break;
+
             case 3:
                 System.out.println("""
+                         
                          O jogo consiste básicamente em uma guerra estratégica, onde seu objetivo é eliminar todas as tropas inimigas para sair com a vitória.
-                         Suas peças são identificadas no game pela primeira letra, seguida do número do jogador a quem ela pertence, e por fim possui-se um V - "quantiaDeVida"
-                         é assim que aparecerá no seu tabuleiro cada peça, recomendo que entre na aba "conhecer os personagens" para saber os artibutos de todos os personagens.
-                         Desejamos que tenha uma grande diversão e saia vitorioso nas guerras.
+                         Suas peças são identificadas no game pela primeira letra, seguida do número do jogador a quem ela pertence, e por fim possui-se um 
+                         V - "quantiaDeVida" é assim que aparecerá no seu tabuleiro cada peça, recomendo que entre na aba "conhecer os personagens" para saber
+                         os artibutos de todos os personagens. Desejamos que tenha uma grande diversão e saia vitorioso nas guerras.
+                         
+                         ALGUMAS REGRAS E DICAS BÁSICAS
+                         
+                         1 - Deuses
+                         
+                         No jogo temos 3 Deuses da mitologia grega, Hades, Poseidon e Zeus. Eles custam mais caro por serem personagens especiais e também é
+                         possível ter apenas um. Usem eles com sabdoria, eles possuem poderes especiais unicos e altamente perigosos se utilizados nas mãos 
+                         erradas.
+                         
+                         2 - Defender
+                         
+                         Todos os personagens tem a opção de defender, que nada mais é do que curar aliados, o Centauro cura no eixo x, o Arqueiro no eixo y,
+                         a Ninfa do Bosque cura todas as casas em volta de si mesma e todos os Deuses curam tanto no eixo x como no eixo y. Porém tome muito
+                         cuidado com a cura, ela cura tanto aliados quanto inimigos, use com sabedoria.
+                         
+                         3 - O Tabuleiro
+                         
+                         O Tabuleiro é composto por uma matriz 10x10, onde ela começa a contagem pelo topo na horizontal, então sempre preste atenção para
+                         informar a casa correta, um erro pode lhe custar caro.
+                         
+                         Bom, por enquanto essas são nossas dicas, se divirta!
+                         
+                         
                         """);
                 break;
+
             case 4:
                 System.exit(0);
                 break;
+
             default:
                 System.out.println("Opção selecionada é inválida");
                 break;
         }
-
     }
 
     private static void game() {
@@ -74,16 +103,15 @@ public class Main {
                 escolhePersonagens(jogador1);
                 escolhePersonagens(jogador2);
                 break;
+
             case 1:
                 escolhePersonagens(jogador2);
                 escolhePersonagens(jogador1);
                 break;
         }
 
-
         posicionarPecas(jogador1);
         posicionarPecas(jogador2);
-
 
         do {
 
@@ -128,17 +156,24 @@ public class Main {
         return false;
     }
 
-    private static int realizarJogada(Jogador jogador, Jogador adversario) {
-        int mortosNoRound = 0;
-        String mortosNaJogada = "";
+    private static void realizarJogada(Jogador jogador, Jogador adversario) {
+
         int nLances = 3;
+
+        //Serve para localizar o Deus sendo utilizado e carregar a Barra de Especial do mesmo.
+        for (Posicao posicao : tabuleiro.getPosicoes()) {
+            if (posicao.getPersonagem() instanceof Deus && posicao.getPersonagem().getPlayer() == jogador.getNumero()) {
+                if (((Deus) posicao.getPersonagem()).getBarraEspecial() < ((Deus) posicao.getPersonagem()).getCargaEspecial()) {
+                    ((Deus) posicao.getPersonagem()).setBarraEspecial(((Deus) posicao.getPersonagem()).getBarraEspecial() + 1);
+                }
+            }
+        }
 
         do {
 
             System.out.println("Todas as peças que possuem o número " + jogador.getNumero() + " são suas " + jogador.getNome());
             System.out.println("Você tem " + nLances + " lance(s), informe a posição da peça que deseja utilizar para o  lance?");
             printarTabuleiro();
-
             int pecaAMexer = sc.nextInt() - 1;
             Personagem personagemAcao = tabuleiro.getPosicoes().get(pecaAMexer).getPersonagem();
 
@@ -146,16 +181,37 @@ public class Main {
                 System.out.println("Não existem peças nesse local");
             } else if (personagemAcao.getPlayer() == jogador.getNumero()) {
 
-                System.out.println("Você selecionou o " + personagemAcao.getNome() + ", o que deseja fazer com ele?");
-                System.out.println("""
-                        1 - Mover
-                        2 - Atacar
-                        3 - Defender
-                        """);
+                //Serve para mostrar as opções dos Deuses, que são levemente diferentes.
+                if (personagemAcao instanceof Deus) {
+                    System.out.println("Você selecionou o " + personagemAcao.getNome() + ", o que deseja fazer com ele?");
+                    System.out.println("""
+                            0 - Usar outra peça
+                            1 - Mover
+                            2 - Atacar
+                            3 - Defender
+                            """);
+                    if (((Deus) personagemAcao).getBarraEspecial() == ((Deus) personagemAcao).getCargaEspecial()) {
+                        System.out.println("4 - Realizar Especial");
+                    } else {
+                        System.out.println("Carregando Especial " + ((Deus) personagemAcao).getBarraEspecial() + " / " + ((Deus) personagemAcao).getCargaEspecial());
+                    }
+                } else {
+                    System.out.println("Você selecionou o " + personagemAcao.getNome() + ", o que deseja fazer com ele?");
+                    System.out.println("""
+                            0 - Usar outra peça
+                            1 - Mover
+                            2 - Atacar
+                            3 - Defender
+                            """);
+                }
+
                 int escolhaMovimento = sc.nextInt();
 
                 switch (escolhaMovimento) {
-
+                    case 0:
+                        System.out.println("Entendido.\n\n");
+                        break;
+                    //Move peça
                     case 1:
                         System.out.println("Seu personagem tem " + personagemAcao.getMovimento() + " de capacidade de movimento, para que lado deseja ir?");
                         System.out.println("""
@@ -169,31 +225,41 @@ public class Main {
                                 """);
                         int ladoQueVai = sc.nextInt();
 
-                        System.out.println("Quantas casas? Lembre-se de que você não pode ir para uma casa que já tenha algum personagem");
-                        int quantiaAAndar = sc.nextInt();
-
-                        if (quantiaAAndar > personagemAcao.getMovimento()) {
-                            System.out.println("A capacidade de movimento é inferior à quantia que você deseja andar");
-
-                        } else if (personagemAcao.mover(quantiaAAndar, tabuleiro, ladoQueVai)) {
-                            nLances--;
-
+                        if (ladoQueVai < 1 || ladoQueVai > 4) {
+                            System.out.println("Você inseriu uma opção inválida.");
                         } else {
-                            System.out.println("Seu movimento não foi válido.");
+                            System.out.println("Quantas casas? Lembre-se de que você não pode ir para uma casa que já tenha algum personagem");
+                            int quantiaAAndar = sc.nextInt();
+
+                            if (quantiaAAndar > personagemAcao.getMovimento()) {
+                                System.out.println("A capacidade de movimento é inferior à quantia que você deseja andar");
+
+                            } else if (personagemAcao.mover(quantiaAAndar, tabuleiro, ladoQueVai)) {
+                                nLances--;
+
+                            } else {
+                                System.out.println("Seu movimento não foi válido.");
+                            }
                         }
                         break;
 
+                    //Ataca peça
                     case 2:
                         System.out.println("Informe a peça que deseja atacar");
                         int pecaAAtacar = sc.nextInt() - 1;
                         Personagem personagemAtacado = tabuleiro.getPosicoes().get(pecaAAtacar).getPersonagem();
+
+                        //verifica possíveis lances inválidos
                         if (personagemAtacado == null) {
                             System.out.println("Não existe nenhuma peça nessa posição");
                         } else if (personagemAtacado.getPlayer() == jogador.getNumero()) {
                             System.out.println("Não é possível atacar uma peça aliada.");
                         } else {
+
                             if (personagemAcao.atacar(personagemAtacado, tabuleiro, adversario)) {
                                 nLances--;
+
+                                //Verifica se a peça atacada morreu para informar ao usuário.
                                 if (tabuleiro.getPosicoes().get(pecaAAtacar).getPersonagem() == null) {
                                     System.out.println("Você matou o inimigo, parabéns.");
                                     if (adversario.getMortos() == adversario.getPersonagensEscolhidos().size()) {
@@ -208,27 +274,108 @@ public class Main {
                             }
                         }
                         break;
+
+                    // Defende peça, o que no game significa curar aliados.
                     case 3:
-                       if (personagemAcao.defender(tabuleiro)){
-                           System.out.println("Lance realizado com sucesso, ajudou sua tropa aliada.");
-                           nLances--;
-                       } else {
-                           System.out.println("Não havia ninguém para ser curado alí, jogue novamente.");
-                       }
+                        if (personagemAcao.defender(tabuleiro)) {
+                            System.out.println("Lance realizado com sucesso, ajudou sua tropa aliada.");
+                            nLances--;
+                        } else {
+                            System.out.println("Não havia ninguém para ser curado alí, jogue novamente.");
+                        }
                         break;
 
+                    //Tem utilidade em caso de ser um Deus selecionado, serve para executar o especial.
+                    case 4:
+                        boolean especialUtilizado;
+
+                        //Verifica se o personagem escolhido é um Deus
+                        if (personagemAcao instanceof Deus) {
+
+                            //Verifica qual Deus é, pois, caso seja hades é passado como parametro o jogador que está
+                            // realizando uma ação, caso contrário o adversário.
+                            if (personagemAcao instanceof Hades) {
+                                especialUtilizado = ((Hades) personagemAcao).realizarEspecial(tabuleiro, jogador);
+                            } else {
+                                especialUtilizado = ((Deus) personagemAcao).realizarEspecial(tabuleiro, adversario);
+                            }
+
+                            //Verifica se tudo ocorreu corretamente e printa uma frase específica de cada Deus ao usar o especial
+                            if (especialUtilizado) {
+                                ((Deus) personagemAcao).setBarraEspecial(0);
+                                System.out.println(fraseParaOEspecial(personagemAcao, jogador, tabuleiro));
+                                nLances--;
+
+                                //Verifica se ainda tem inimigos para combater ou o jogo deve ser encerrado.
+                                if (adversario.getMortos() == adversario.getPersonagensEscolhidos().size()) {
+                                    nLances = 0;
+                                }
+                            } else {
+                                System.out.println("Algo aconteceu e não foi possível utilizar o especial.");
+                            }
+
+                            //Caso não seja um Deus.
+                        } else {
+                            System.out.println("Escolha inválida, tente novamente");
+                        }
+                        break;
+
+                    default:
+                        System.out.println("Escolha inválida, tente novamente");
+                        break;
                 }
 
             } else {
                 System.out.println("Você selecionou uma peça do adversário.");
             }
         } while (nLances > 0);
+    }
 
-        return mortosNoRound;
+    private static String fraseParaOEspecial(Personagem personagemAcao, Jogador jogador, Tabuleiro tabuleiro) {
 
+        if (personagemAcao instanceof Hades) {
+            return "Os mortos lhe ajudaram, cura concedida do submundo";
+        } else if (personagemAcao instanceof Poseidon) {
+            if (procuraDeusAdversario(tabuleiro, jogador) != null) {
+
+                //A frase para Zeus contém uma "piadinha" pois quando poseidon atinge zeus, retira uma parte da barra de especial dele
+                if (procuraDeusAdversario(tabuleiro, jogador) instanceof Zeus) {
+                    return "Tsunami na área, acho que eles ficaram gripados, devido a baixa imunidade, todos ficaram sem defesa.\n" +
+                            "AH, quase esqueci de falar, um certo Deus aí entrou em curto circuito.";
+                } else {
+                    return "Tsunami na área, acho que eles ficaram gripados, devido a baixa imunidade, todos ficaram sem defesa.";
+                }
+            }
+        } else if (personagemAcao instanceof Zeus) {
+            if (procuraDeusAdversario(tabuleiro, jogador) != null) {
+
+                //A frase para Poseidon contém uma "piadinha" pois quando zeus atinge poseidon, retira o dobro de dano
+                if (procuraDeusAdversario(tabuleiro, jogador) instanceof Poseidon) {
+                    return "Estão em choque? Dano de eletrocutamento em todos.\n" +
+                            "O 'Aquaman' sentiu um pouco mais do impacto.";
+                } else {
+                    return "Estão em choque? Dano de eletrocutamento em todos.";
+                }
+            }
+        }
+        return "Algo indevido aconteceu";
+    }
+
+    private static Personagem procuraDeusAdversario(Tabuleiro tabuleiro, Jogador jogador) {
+
+        for (Posicao posicao : tabuleiro.getPosicoes()) {
+            if (posicao.getPersonagem() instanceof Deus) {
+                if (posicao.getPersonagem().getPlayer() != jogador.getNumero()) {
+                    return posicao.getPersonagem();
+                }
+            }
+
+        }
+        return null;
     }
 
     private static void posicionarPecas(Jogador jogador) {
+
         System.out.println("Agora é a hora de posicionar peças, o tabuleiro segue sempre a linha pela horizontal, \n" +
                 "então pense com sabedoria e nos informe a posição em que deseja colocar sua peça.");
 
@@ -237,13 +384,18 @@ public class Main {
             System.out.println(jogador.getNome() + ", suas casas disponíveis para posicionar suas peças são de " + jogador.getCasasInicio() + " até " + jogador.getCasasFinal());
             System.out.println("Onde você deseja posicionar seu: " + jogador.getPersonagensEscolhidos().get(i).getNome() + "?");
             printarTabuleiroVazio();
-
             int escolhaPosicao = sc.nextInt() - 1;
+
             if (escolhaPosicao < jogador.getCasasInicio() - 1 || escolhaPosicao > jogador.getCasasFinal() - 1) {
                 System.out.println("Escolha uma casa válida.");
                 i--;
             } else {
-                tabuleiro.setPosicoes(escolhaPosicao, jogador.getPersonagensEscolhidos().get(i));
+                if (tabuleiro.getPosicoes().get(escolhaPosicao).getPersonagem() != null) {
+                    System.out.println("Tem uma peça sua aqui já, não é possível escolher essa casa.");
+                    i--;
+                } else {
+                    tabuleiro.setPosicoes(escolhaPosicao, jogador.getPersonagensEscolhidos().get(i));
+                }
                 if (i == jogador.getPersonagensEscolhidos().size() - 1) {
                     printarTabuleiro();
                 }
@@ -276,6 +428,7 @@ public class Main {
     }
 
     private static void escolhePersonagens(Jogador jogador) {
+
         Personagem arqueiroSelecao = new Arqueiro(0);
         Personagem centauroSelecao = new Centauro(0);
         Personagem ninfaDoBosqueSelecao = new NinfaDoBosque(0);
@@ -290,30 +443,36 @@ public class Main {
         System.out.println("3 - Poseidon, custo: " + poseidonSelecao.getCusto());
         System.out.println("4 - Não desejo usar nenhum Deus. ");
         int opcaoDeus = sc.nextInt();
+
         switch (opcaoDeus) {
             case 1:
                 jogador.getPersonagensEscolhidos().add(new Zeus(jogador.getNumero()));
                 jogador.setElixir(jogador.getElixir() - zeusSelecao.getCusto());
                 deuses = 1;
                 break;
+
             case 2:
                 jogador.getPersonagensEscolhidos().add(new Hades(jogador.getNumero()));
                 jogador.setElixir(jogador.getElixir() - hadesSelecao.getCusto());
                 deuses = 1;
                 break;
+
             case 3:
                 jogador.getPersonagensEscolhidos().add(new Poseidon(jogador.getNumero()));
                 jogador.setElixir(jogador.getElixir() - poseidonSelecao.getCusto());
                 deuses = 1;
                 break;
+
             case 4:
                 deuses = -1;
                 break;
+
             default:
                 System.out.println("Você selecionou uma opção inválida");
                 break;
         }
         do {
+
             System.out.println("Caro(a) " + jogador.getNome() + ", você possuí no momento " + jogador.getElixir() + " de elixir.");
             System.out.println("Escolha o personagem que você deseja adicionar ao seu exército:");
             System.out.println("1 - Arqueiro, custo: " + arqueiroSelecao.getCusto());
@@ -322,34 +481,46 @@ public class Main {
             System.out.println("4 - Estou satisfeito com o que tenho. ");
             System.out.println("0 - Não quero mais jogar");
             int opcaoPersona = sc.nextInt();
+
             switch (opcaoPersona) {
                 case 1:
                     jogador.getPersonagensEscolhidos().add(new Arqueiro(jogador.getNumero()));
                     jogador.setElixir(jogador.getElixir() - arqueiroSelecao.getCusto());
                     break;
+
                 case 2:
                     jogador.getPersonagensEscolhidos().add(new Centauro(jogador.getNumero()));
                     jogador.setElixir(jogador.getElixir() - centauroSelecao.getCusto());
                     break;
+
                 case 3:
                     jogador.getPersonagensEscolhidos().add(new NinfaDoBosque(jogador.getNumero()));
                     jogador.setElixir(jogador.getElixir() - ninfaDoBosqueSelecao.getCusto());
                     break;
+
                 case 4:
+                    if (jogador.getPersonagensEscolhidos().size() == 0) {
+                        System.out.println("Você se recusou a escolher personagens, então o jogo foi dado como encerrado.");
+                        menuInicial();
+                    }
                     jogador.setElixir(0);
                     break;
+
                 case 0:
                     System.out.println("Jogo encerrado.");
                     System.exit(0);
                     break;
+
                 default:
                     System.out.println("Você selecionou uma opção inválida.");
                     break;
 
             }
+
         } while (jogador.getElixir() >= 2);
 
         System.out.println("Sua escolha de personagens foi realizada. Boa sorte " + jogador.getNome() + "!\n\n");
+
     }
 
     private static void infoPersonagens() {
@@ -376,12 +547,20 @@ public class Main {
                 break;
             case 4:
                 mostrarInfo(new Zeus(0));
+                System.out.println("Além disso Zeus também possui um especial, que lhe concede o poder de causar 35 de dano à todos os \n" +
+                        "inimigos, caso esse inimigo seja poseidon retira um dano adicional de mais 35. A barra de especial demora 6 \n" +
+                        "jogadas para carregar. Cuidado, poseidon também tem uma arma contra Zeus, retirando 3 cargas da barra de especial.");
                 break;
             case 5:
                 mostrarInfo(new Poseidon(0));
+                System.out.println("Além disso Poseidon também possui um especial, que lhe concede o poder de retirar a defesa de todos os \n" +
+                        "inimigos, caso esse inimigo seja Zeus retira também 3 pontos de carga do especial.\n" +
+                        "Cuidado, Poseidon tem uma deficiência jogando contra Zeus, fazendo com que leve o dobro de dano do especial dele.");
                 break;
             case 6:
                 mostrarInfo(new Hades(0));
+                System.out.println("Hades tem  um especial que serve para curar seus aliados, de maneira proporcional a quantia de mortos \n" +
+                        "aumentando em 6% a cada morto.");
                 break;
             case 7:
                 break;

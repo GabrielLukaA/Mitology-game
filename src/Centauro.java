@@ -3,10 +3,10 @@ import java.util.ArrayList;
 public class Centauro extends Personagem {
 
     public Centauro(int numero) {
-        this.setVida(150);
+        this.setVida(185);
         this.setVidaMax(150);
         this.setAtaque(70);
-        this.setDefesa(25);
+        this.setDefesa(50);
         this.setAlcance(1);
         this.setMovimento(3);
         this.setNome("Centauro");
@@ -19,42 +19,56 @@ public class Centauro extends Personagem {
         int semCura = 0;
         ArrayList<Posicao> posicoes = tabuleiro.getPosicoes();
         Personagem aSerCurado = null;
-        int posicaoPersonagem = 0;
+        int indexPersonagem = 0;
 
+
+        // Pega o index do Centauro
         for (Posicao posicao : posicoes) {
             if (posicao.getPersonagem() == this) {
-                posicaoPersonagem = tabuleiro.getPosicoes().indexOf(posicao);
+                indexPersonagem = tabuleiro.getPosicoes().indexOf(posicao);
             }
         }
-        if (!(posicaoPersonagem % 10 == 0) && !((posicaoPersonagem + 1) % 10 == 0)) {
-            if (posicoes.get(posicaoPersonagem + 1).getPersonagem() != null) {
-                aSerCurado = posicoes.get(posicaoPersonagem + 1).getPersonagem();
-                aSerCurado.setVida(aSerCurado.getVida() + aSerCurado.getVidaMax() / 100 * 10);
+        //Centauro cura para o eixo x, então verifica se ele não está em alguma lateral.
+        if (!(indexPersonagem % 10 == 0) && !((indexPersonagem + 1) % 10 == 0)) {
+
+            //Realiza a cura à direita
+            if (posicoes.get(indexPersonagem + 1).getPersonagem() != null) {
+                aSerCurado = posicoes.get(indexPersonagem + 1).getPersonagem();
+                aSerCurado.setVida(aSerCurado.getVida() + aSerCurado.getVidaMax() / 100 * 15);
+                aSerCurado.verificaVidaMaxima();
             } else {
                 semCura++;
             }
-            if (posicoes.get(posicaoPersonagem - 1).getPersonagem() != null) {
-                aSerCurado = posicoes.get(posicaoPersonagem - 1).getPersonagem();
-                aSerCurado.setVida(aSerCurado.getVida() + aSerCurado.getVidaMax() / 100 * 10);
+
+            //Realiza a cura à esquerda
+            if (posicoes.get(indexPersonagem - 1).getPersonagem() != null) {
+                aSerCurado = posicoes.get(indexPersonagem - 1).getPersonagem();
+                aSerCurado.setVida(aSerCurado.getVida() + aSerCurado.getVidaMax() / 100 * 15);
+                aSerCurado.verificaVidaMaxima();
             } else {
                 semCura++;
             }
-        } else if (posicaoPersonagem % 10 == 0) {
-            if (posicoes.get(posicaoPersonagem + 1).getPersonagem() != null) {
-                aSerCurado = posicoes.get(posicaoPersonagem + 1).getPersonagem();
-                aSerCurado.setVida(aSerCurado.getVida() + aSerCurado.getVidaMax() / 100 * 10);
+
+            //Realiza cura apenas para o lado interno do tabuleiro evitando que a cura ocorra de maneira inesperada.
+        } else if (indexPersonagem % 10 == 0) {
+            if (posicoes.get(indexPersonagem + 1).getPersonagem() != null) {
+                aSerCurado = posicoes.get(indexPersonagem + 1).getPersonagem();
+                aSerCurado.setVida(aSerCurado.getVida() + aSerCurado.getVidaMax() / 100 * 15);
+                aSerCurado.verificaVidaMaxima();
             } else {
                 return false;
             }
-        } else if ((posicaoPersonagem + 1) % 10 == 0) {
-            if (posicoes.get(posicaoPersonagem - 1).getPersonagem() != null) {
-                aSerCurado = posicoes.get(posicaoPersonagem - 1).getPersonagem();
-                aSerCurado.setVida(aSerCurado.getVida() + aSerCurado.getVidaMax() / 100 * 10);
+        } else if ((indexPersonagem + 1) % 10 == 0) {
+            if (posicoes.get(indexPersonagem - 1).getPersonagem() != null) {
+                aSerCurado = posicoes.get(indexPersonagem - 1).getPersonagem();
+                aSerCurado.setVida(aSerCurado.getVida() + aSerCurado.getVidaMax() / 100 * 15);
+                aSerCurado.verificaVidaMaxima();
             } else {
                 return false;
             }
         }
 
+        //Verificação caso não haja nenhuma peça nos dois lados, pois em um é possível.
         if (semCura == 2) {
             return false;
         }

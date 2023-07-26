@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 public class Jogador {
-     private String nome;
+    private String nome;
     private int elixir;
 
     private int numero;
@@ -21,6 +21,7 @@ public class Jogador {
         this.personagensEscolhidos = new ArrayList<>();
     }
 
+    //region getters and setters
     public String getNome() {
         return nome;
     }
@@ -76,4 +77,5 @@ public class Jogador {
     public void setPersonagensEscolhidos(ArrayList<Personagem> personagensEscolhidos) {
         this.personagensEscolhidos = personagensEscolhidos;
     }
+    //endregion
 }
