@@ -35,36 +35,7 @@ public class Main {
                 break;
 
             case 3:
-                System.out.println("""
-                         
-                         O jogo consiste básicamente em uma guerra estratégica, onde seu objetivo é eliminar todas as tropas inimigas para sair com a vitória.
-                         Suas peças são identificadas no game pela primeira letra, seguida do número do jogador a quem ela pertence, e por fim possui-se um 
-                         V - "quantiaDeVida" é assim que aparecerá no seu tabuleiro cada peça, recomendo que entre na aba "conhecer os personagens" para saber
-                         os artibutos de todos os personagens. Desejamos que tenha uma grande diversão e saia vitorioso nas guerras.
-                         
-                         ALGUMAS REGRAS E DICAS BÁSICAS
-                         
-                         1 - Deuses
-                         
-                         No jogo temos 3 Deuses da mitologia grega, Hades, Poseidon e Zeus. Eles custam mais caro por serem personagens especiais e também é
-                         possível ter apenas um. Usem eles com sabdoria, eles possuem poderes especiais unicos e altamente perigosos se utilizados nas mãos 
-                         erradas.
-                         
-                         2 - Defender
-                         
-                         Todos os personagens tem a opção de defender, que nada mais é do que curar aliados, o Centauro cura no eixo x, o Arqueiro no eixo y,
-                         a Ninfa do Bosque cura todas as casas em volta de si mesma e todos os Deuses curam tanto no eixo x como no eixo y. Porém tome muito
-                         cuidado com a cura, ela cura tanto aliados quanto inimigos, use com sabedoria.
-                         
-                         3 - O Tabuleiro
-                         
-                         O Tabuleiro é composto por uma matriz 10x10, onde ela começa a contagem pelo topo na horizontal, então sempre preste atenção para
-                         informar a casa correta, um erro pode lhe custar caro.
-                         
-                         Bom, por enquanto essas são nossas dicas, se divirta!
-                         
-                         
-                        """);
+                explicacaoJogo();
                 break;
 
             case 4:
@@ -475,8 +446,8 @@ public class Main {
         }
         do {
 
-            System.out.println("Caro(a) " + jogador.getNome() + ", você possuí no momento " + jogador.getElixir() + " de elixir. E "+
-                    jogador.getPersonagensEscolhidos().size()+" tropas escolhidas, o máximo são 20. Você tem direito a mais "+(20-jogador.getPersonagensEscolhidos().size()));
+            System.out.println("Caro(a) " + jogador.getNome() + ", você possuí no momento " + jogador.getElixir() + " de elixir. E " +
+                    jogador.getPersonagensEscolhidos().size() + " tropas escolhidas, o máximo são 20. Você tem direito a mais " + (20 - jogador.getPersonagensEscolhidos().size()));
             System.out.println("Escolha o personagem que você deseja adicionar ao seu exército:");
             System.out.println("1 - Arqueiro, custo: " + selecionarArqueiro.getCusto());
             System.out.println("2 - Centauro, custo: " + selecionarCentauro.getCusto());
@@ -520,11 +491,11 @@ public class Main {
 
             }
 
-            if (jogador.getPersonagensEscolhidos().size()==20){
+            if (jogador.getPersonagensEscolhidos().size() == 20) {
                 System.out.println("Você atingiou o máximo de tropas.");
                 jogador.setElixir(0);
             }
-            
+
         } while (jogador.getElixir() >= 2);
 
         System.out.println("Sua escolha de personagens foi realizada. Boa sorte " + jogador.getNome() + "!\n\n");
@@ -604,4 +575,40 @@ public class Main {
         }
 
     }
+
+
+    private static void explicacaoJogo() {
+        System.out.println("""
+                 
+                 O jogo consiste básicamente em uma guerra estratégica, onde seu objetivo é eliminar todas as tropas inimigas para sair com a vitória.
+                 Suas peças são identificadas no game pela primeira letra, seguida do número do jogador a quem ela pertence, e por fim possui-se um 
+                 V - "quantiaDeVida" é assim que aparecerá no seu tabuleiro cada peça, recomendo que entre na aba "conhecer os personagens" para saber
+                 os artibutos de todos os personagens. Desejamos que tenha uma grande diversão e saia vitorioso nas guerras.
+                 
+                 ALGUMAS REGRAS E DICAS BÁSICAS
+                 
+                 1 - Deuses
+                 
+                 No jogo temos 3 Deuses da mitologia grega, Hades, Poseidon e Zeus. Eles custam mais caro por serem personagens especiais e também é
+                 possível ter apenas um. Usem eles com sabdoria, eles possuem poderes especiais unicos e altamente perigosos se utilizados nas mãos 
+                 erradas.
+                 
+                 2 - Defender
+                 
+                 Todos os personagens tem a opção de defender, que nada mais é do que curar aliados, o Centauro cura no eixo x, o Arqueiro no eixo y,
+                 a Ninfa do Bosque cura todas as casas em volta de si mesma e todos os Deuses curam tanto no eixo x como no eixo y. Porém tome muito
+                 cuidado com a cura, ela cura tanto aliados quanto inimigos, use com sabedoria.
+                 
+                 3 - O Tabuleiro
+                 
+                 O Tabuleiro é composto por uma matriz 10x10, onde ela começa a contagem pelo topo na horizontal, então sempre preste atenção para
+                 informar a casa correta, um erro pode lhe custar caro.
+                 
+                 Bom, por enquanto essas são nossas dicas, se divirta!
+                 
+                 
+                """);
+    }
+
+
 }
