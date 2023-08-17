@@ -13,28 +13,28 @@ public abstract class Personagem {
     private int player;
     private Posicao posicao;
 
-    public boolean atacar(Personagem oponente, Tabuleiro tabuleiro, Jogador adversario) {
+    public boolean atacar(Personagem inimigo, Tabuleiro tabuleiro, Jogador adversario) {
 
-        double vidaInicial = oponente.getVida();
-        int indexOponente = 0;
-        int indexJogador = 0;
+        double vidaInicial = inimigo.getVida();
+        int indiceTropaInimiga = 0;
+        int indiceAliado = 0;
 
-        //Encontra o index do player e de seu oponente
+        //Encontra o index do player e de seu inimigo
         for (int i = 0; i < tabuleiro.getPosicoes().size(); i++) {
-            if (tabuleiro.getPosicoes().get(i).getPersonagem() == oponente) {
-                indexOponente = i;
+            if (tabuleiro.getPosicoes().get(i).getPersonagem() == inimigo) {
+                indiceTropaInimiga = i;
             }
 
             if (tabuleiro.getPosicoes().get(i).getPersonagem() == this) {
-                indexJogador = i;
+                indiceAliado = i;
             }
         }
 
-        //Realiza o ataque se o oponente está acima
-        for (int i = indexJogador + (this.getAlcance() * -10); indexJogador > i; i += 10) {
+        //Realiza o ataque se o inimigo está acima
+        for (int i = indiceAliado + (this.getAlcance() * -10); indiceAliado > i; i += 10) {
 
-            if (indexOponente == i) {
-                for (int l = indexJogador - 10; l > indexOponente; l -= 10) {
+            if (indiceTropaInimiga == i) {
+                for (int l = indiceAliado - 10; l > indiceTropaInimiga; l -= 10) {
                     if (l <= 10) {
                         return false;
                     }
@@ -44,12 +44,12 @@ public abstract class Personagem {
                     }
                 }
 
-                oponente.setVida(oponente.getVida() - (this.ataque - oponente.getDefesa()));
+                inimigo.setVida(inimigo.getVida() - (this.ataque - inimigo.getDefesa()));
 
                 //Seta o personagem como morto.
-                if (oponente.getVida() <= 0) {
+                if (inimigo.getVida() <= 0) {
                     for (int c = 0; c < tabuleiro.getPosicoes().size(); c++) {
-                        if (tabuleiro.getPosicoes().get(c).getPersonagem() == oponente) {
+                        if (tabuleiro.getPosicoes().get(c).getPersonagem() == inimigo) {
                             tabuleiro.getPosicoes().get(c).setPersonagem(null);
                             adversario.setMortos(adversario.getMortos() + 1);
                             return true;
@@ -59,11 +59,11 @@ public abstract class Personagem {
             }
         }
 
-        //Realiza o ataque se o oponente está abaixo
-        for (int i = indexJogador + (this.getAlcance() * 10); indexJogador < i; i -= 10) {
+        //Realiza o ataque se o inimigo está abaixo
+        for (int i = indiceAliado + (this.getAlcance() * 10); indiceAliado < i; i -= 10) {
 
-            if (indexOponente == i) {
-                for (int l = indexJogador + 10; l < indexOponente; l += 10) {
+            if (indiceTropaInimiga == i) {
+                for (int l = indiceAliado + 10; l < indiceTropaInimiga; l += 10) {
                     if (l <= 10) {
                         return false;
                     }
@@ -73,11 +73,11 @@ public abstract class Personagem {
                     }
                 }
 
-                oponente.setVida(oponente.getVida() - (this.ataque - oponente.getDefesa()));
+                inimigo.setVida(inimigo.getVida() - (this.ataque - inimigo.getDefesa()));
 
-                if (oponente.getVida() <= 0) {
+                if (inimigo.getVida() <= 0) {
                     for (int c = 0; c < tabuleiro.getPosicoes().size(); c++) {
-                        if (tabuleiro.getPosicoes().get(c).getPersonagem() == oponente) {
+                        if (tabuleiro.getPosicoes().get(c).getPersonagem() == inimigo) {
                             tabuleiro.getPosicoes().get(c).setPersonagem(null);
                             adversario.setMortos(adversario.getMortos() + 1);
                             return true;
@@ -88,11 +88,11 @@ public abstract class Personagem {
 
         }
 
-        //Realiza o ataque se o oponente está à esquerda
-        for (int i = indexJogador + this.alcance; indexJogador < i; i -= 1) {
+        //Realiza o ataque se o inimigo está à esquerda
+        for (int i = indiceAliado + this.alcance; indiceAliado < i; i -= 1) {
 
-            if (indexOponente == i) {
-                for (int l = indexJogador + 1; l < indexOponente; l += 1) {
+            if (indiceTropaInimiga == i) {
+                for (int l = indiceAliado + 1; l < indiceTropaInimiga; l += 1) {
                     if ((l + 1) % 10 == 0) {
                         return false;
                     }
@@ -102,11 +102,11 @@ public abstract class Personagem {
                     }
                 }
 
-                oponente.setVida(oponente.getVida() - (this.ataque - oponente.getDefesa()));
+                inimigo.setVida(inimigo.getVida() - (this.ataque - inimigo.getDefesa()));
 
-                if (oponente.getVida() <= 0) {
+                if (inimigo.getVida() <= 0) {
                     for (int c = 0; c < tabuleiro.getPosicoes().size(); c++) {
-                        if (tabuleiro.getPosicoes().get(c).getPersonagem() == oponente) {
+                        if (tabuleiro.getPosicoes().get(c).getPersonagem() == inimigo) {
                             tabuleiro.getPosicoes().get(c).setPersonagem(null);
                             adversario.setMortos(adversario.getMortos() + 1);
                             return true;
@@ -116,11 +116,11 @@ public abstract class Personagem {
             }
         }
 
-        //Realiza o ataque se o oponente está à direita
-        for (int i = indexJogador - this.alcance; indexJogador > i; i += 1) {
+        //Realiza o ataque se o inimigo está à direita
+        for (int i = indiceAliado - this.alcance; indiceAliado > i; i += 1) {
 
-            if (indexOponente == i) {
-                for (int l = indexJogador - 1; l > indexOponente; l -= 1) {
+            if (indiceTropaInimiga == i) {
+                for (int l = indiceAliado - 1; l > indiceTropaInimiga; l -= 1) {
                     if (l % 10 == 0) {
                         return false;
                     }
@@ -130,11 +130,11 @@ public abstract class Personagem {
                     }
                 }
 
-                oponente.setVida(oponente.getVida() - (this.ataque - oponente.getDefesa()));
+                inimigo.setVida(inimigo.getVida() - (this.ataque - inimigo.getDefesa()));
 
-                if (oponente.getVida() <= 0) {
+                if (inimigo.getVida() <= 0) {
                     for (int c = 0; c < tabuleiro.getPosicoes().size(); c++) {
-                        if (tabuleiro.getPosicoes().get(c).getPersonagem() == oponente) {
+                        if (tabuleiro.getPosicoes().get(c).getPersonagem() == inimigo) {
                             tabuleiro.getPosicoes().get(c).setPersonagem(null);
                             adversario.setMortos(adversario.getMortos() + 1);
                             return true;
@@ -144,9 +144,9 @@ public abstract class Personagem {
             }
         }
 
-//Verifica se ainda assim nenhum oponente foi atacado, indicando que foi um ataque na diagonal,
+//Verifica se ainda assim nenhum inimigo foi atacado, indicando que foi um ataque na diagonal,
 // logo se retorna falso pois nesse  game não são aceitos ataqeus diagonais.
-        double vidaAoFim = oponente.getVida();
+        double vidaAoFim = inimigo.getVida();
 
         if (vidaAoFim == vidaInicial) {
             return false;
@@ -158,40 +158,40 @@ public abstract class Personagem {
     public abstract boolean defender(Tabuleiro tabuleiro);
 
 
-    public boolean mover(int quantiaAandar, Tabuleiro tabuleiro, int ladoQueVai) {
+    public boolean mover(int quantiaAandar, Tabuleiro tabuleiro, int direcao) {
 
         ArrayList<Posicao> posicoes = tabuleiro.getPosicoes();
-        int indexPersonagem = 0;
+        int indiceTropa = 0;
 
         //Identifica o index do personagem
         //PS. Se possível mudar para foreach apenas para todas as classes estarem padronizadas 
         //Pensar em transformar isso em uma unica função. para que todas as classes possam fazer uso.
         for (int i = 0; i < tabuleiro.getPosicoes().size(); i++) {
             if (tabuleiro.getPosicoes().get(i).getPersonagem() == this) {
-                indexPersonagem = i;
+                indiceTropa = i;
             }
         }
 
-        switch (ladoQueVai) {
+        switch (direcao) {
             case 1:
-                int indexLocalDesejado = indexPersonagem - (10 * quantiaAandar);
+                int indiceLocalDesejado = indiceTropa - (10 * quantiaAandar);
 
-                if (indexLocalDesejado < 0) {
+                if (indiceLocalDesejado < 0) {
                     return false;
                 }
 
                 //Barra caso tenha peça no local
-                if (posicoes.get(indexLocalDesejado).getPersonagem() != null) {
+                if (posicoes.get(indiceLocalDesejado).getPersonagem() != null) {
                     return false;
                 }
 
                 //Se estiver na primeira linha e quiser ir pra cima não pode ser possível.
-                if (indexPersonagem <= 10) {
+                if (indiceTropa <= 10) {
                     return false;
                 }
 
                 //Verifica se não há peças no caminho até o local desejado
-                for (int i = indexPersonagem - 10; i > indexLocalDesejado; i -= 10) {
+                for (int i = indiceTropa - 10; i > indiceLocalDesejado; i -= 10) {
                     if (i <= 10) {
                         return false;
                     }
@@ -200,28 +200,28 @@ public abstract class Personagem {
                     }
                 }
 
-                setarMovimento(indexPersonagem, indexLocalDesejado, tabuleiro);
+                setarMovimento(indiceTropa, indiceLocalDesejado, tabuleiro);
                 break;
 
             case 2:
-                indexLocalDesejado = indexPersonagem + (10 * quantiaAandar);
+                indiceLocalDesejado = indiceTropa + (10 * quantiaAandar);
 
-                if (indexLocalDesejado > 99) {
+                if (indiceLocalDesejado > 99) {
                     return false;
                 }
 
                 //Barra caso tenha peça no local
-                if (posicoes.get(indexLocalDesejado).getPersonagem() != null) {
+                if (posicoes.get(indiceLocalDesejado).getPersonagem() != null) {
                     return false;
                 }
 
                 //Se estiver na ultima linha e quiser ir pra baixo não pode ser possível.
-                if (indexPersonagem >= 91) {
+                if (indiceTropa >= 91) {
                     return false;
                 }
 
                 //Verifica se não há peças no caminho até o local desejado
-                for (int i = indexPersonagem + 10; i < indexLocalDesejado; i += 10) {
+                for (int i = indiceTropa + 10; i < indiceLocalDesejado; i += 10) {
                     if (i >= 91) {
                         return false;
                     }
@@ -230,23 +230,23 @@ public abstract class Personagem {
                     }
                 }
 
-                setarMovimento(indexPersonagem, indexLocalDesejado, tabuleiro);
+                setarMovimento(indiceTropa, indiceLocalDesejado, tabuleiro);
                 break;
 
             case 3:
-                indexLocalDesejado = indexPersonagem - quantiaAandar;
+                indiceLocalDesejado = indiceTropa - quantiaAandar;
 
-                if (indexLocalDesejado < 0) {
+                if (indiceLocalDesejado < 0) {
                     return false;
                 }
 
                 //Barra caso tenha peça no local
-                if (posicoes.get(indexLocalDesejado).getPersonagem() != null) {
+                if (posicoes.get(indiceLocalDesejado).getPersonagem() != null) {
                     return false;
                 }
 
                 //Verifica se não há peças no caminho até o local desejado
-                for (int i = indexPersonagem - 1; i > indexLocalDesejado; i -= 1) {
+                for (int i = indiceTropa - 1; i > indiceLocalDesejado; i -= 1) {
                     //Se está na lateral e ainda tem que ir mais não pode ser possível
                     if (i % 10 == 0) {
                         return false;
@@ -256,23 +256,23 @@ public abstract class Personagem {
                     }
                 }
 
-                setarMovimento(indexPersonagem, indexLocalDesejado, tabuleiro);
+                setarMovimento(indiceTropa, indiceLocalDesejado, tabuleiro);
                 break;
 
             case 4:
-                indexLocalDesejado = indexPersonagem + quantiaAandar;
+                indiceLocalDesejado = indiceTropa + quantiaAandar;
 
-                if (indexLocalDesejado > 99) {
+                if (indiceLocalDesejado > 99) {
                     return false;
                 }
 
                 //Barra caso tenha peça no local
-                if (posicoes.get(indexLocalDesejado).getPersonagem() != null) {
+                if (posicoes.get(indiceLocalDesejado).getPersonagem() != null) {
                     return false;
                 }
 
                 //Verifica se não há peças no caminho até o local desejado
-                for (int i = indexPersonagem + 1; i < indexLocalDesejado; i += 1) {
+                for (int i = indiceTropa + 1; i < indiceLocalDesejado; i += 1) {
                     //Se está na lateral e ainda tem que ir mais não pode ser possível
                     if ((i + 1) % 10 == 0) {
                         return false;
@@ -282,7 +282,7 @@ public abstract class Personagem {
                     }
                 }
 
-                setarMovimento(indexPersonagem, indexLocalDesejado, tabuleiro);
+                setarMovimento(indiceTropa, indiceLocalDesejado, tabuleiro);
                 break;
         }
 
@@ -290,12 +290,12 @@ public abstract class Personagem {
     }
 
     //Função que auxilia na reutilização de código e apenas setta a posição antiga como nula e a nova com o personagem.
-    private void setarMovimento(int indexPersonagem, int indexLocalDesejado, Tabuleiro tabuleiro) {
+    private void setarMovimento(int indiceTropa, int indiceLocalDesejado, Tabuleiro tabuleiro) {
         Posicao posicao = new Posicao();
         posicao.setPersonagem(this);
-        Posicao antiga = tabuleiro.getPosicoes().get(indexPersonagem);
+        Posicao antiga = tabuleiro.getPosicoes().get(indiceTropa);
         antiga.setPersonagem(null);
-        Posicao nova = tabuleiro.getPosicoes().get(indexLocalDesejado);
+        Posicao nova = tabuleiro.getPosicoes().get(indiceLocalDesejado);
         nova.setPersonagem(this);
     }
 

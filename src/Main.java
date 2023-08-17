@@ -85,11 +85,11 @@ public class Main {
         System.out.println("Jogador 2: ");
         Jogador jogador2 = new Jogador(sc.next(), 2, 81, 100);
 
-        Random escolhePlayer = new Random();
-        int sorteio = escolhePlayer.nextInt(2);
+        Random sorteiaJogador = new Random();
+        int jogadorSorteado = sorteiaJogador.nextInt(2);
         String nomeDoQueInicia;
 
-        if (sorteio == 0) {
+        if (jogadorSorteado == 0) {
             nomeDoQueInicia = jogador1.getNome();
         } else {
             nomeDoQueInicia = jogador2.getNome();
@@ -98,7 +98,7 @@ public class Main {
         System.out.print("Será sorteado quem começará o jogo\n.\n.\n.\n" +
                 "O(a) escolhido(a) foi:  " + nomeDoQueInicia + "\n");
 
-        switch (sorteio) {
+        switch (jogadorSorteado) {
             case 0:
                 escolhePersonagens(jogador1);
                 escolhePersonagens(jogador2);
@@ -115,17 +115,17 @@ public class Main {
 
         do {
 
-            switch (sorteio) {
+            switch (jogadorSorteado) {
 
                 case 0:
                     realizarJogada(jogador1, jogador2);
                     if (verificaGanhador(jogador2)) {
-                        System.out.println(("Vitória do jogador " + jogador1.getNome() + "! Parabéns.\n\n\n"));
+                        System.out.println(("Vitória do jogador(a) " + jogador1.getNome() + "! Parabéns.\n\n\n"));
                         tabuleiro = new Tabuleiro();
                     } else {
                         realizarJogada(jogador2, jogador1);
                         if (verificaGanhador(jogador1)) {
-                            System.out.println(("Vitória do jogador " + jogador2.getNome() + "! Parabéns.\n\n\n"));
+                            System.out.println(("Vitória do jogador(a) " + jogador2.getNome() + "! Parabéns.\n\n\n"));
                             tabuleiro = new Tabuleiro();
                         }
                     }
@@ -134,19 +134,21 @@ public class Main {
                 case 1:
                     realizarJogada(jogador2, jogador1);
                     if (verificaGanhador(jogador1)) {
-                        System.out.println(("Vitória do jogador " + jogador2.getNome() + "! Parabéns.\n\n\n"));
+                        System.out.println(("Vitória do jogador(a) " + jogador2.getNome() + "! Parabéns.\n\n\n"));
                         tabuleiro = new Tabuleiro();
                     } else {
                         realizarJogada(jogador1, jogador2);
                         if (verificaGanhador(jogador2)) {
-                            System.out.println(("Vitória do jogador " + jogador1.getNome() + "! Parabéns.\n\n\n"));
+                            System.out.println(("Vitória do jogador(a) " + jogador1.getNome() + "! Parabéns.\n\n\n"));
                             tabuleiro = new Tabuleiro();
                         }
                     }
                     break;
             }
 
-        } while (jogador1.getMortos() < jogador1.getPersonagensEscolhidos().size() && jogador2.getMortos() < jogador2.getPersonagensEscolhidos().size());
+        } while (!verificaGanhador(jogador1) && !verificaGanhador(jogador2));
+//   Antigamente o while usava essa ideia:
+//   jogador1.getMortos() < jogador1.getPersonagensEscolhidos().size() && jogador2.getMortos() < jogador2.getPersonagensEscolhidos().size()
     }
 
     private static boolean verificaGanhador(Jogador oponente) {
@@ -158,7 +160,7 @@ public class Main {
 
     private static void realizarJogada(Jogador jogador, Jogador adversario) {
 
-        int nLances = 3;
+        int quantiaLances = 3;
 
         //Serve para localizar o Deus sendo utilizado e carregar a Barra de Especial do mesmo.
         for (Posicao posicao : tabuleiro.getPosicoes()) {
@@ -172,31 +174,31 @@ public class Main {
         do {
 
             System.out.println("Todas as peças que possuem o número " + jogador.getNumero() + " são suas " + jogador.getNome());
-            System.out.println("Você tem " + nLances + " lance(s), informe a posição da peça que deseja utilizar para o  lance?");
+            System.out.println("Você tem " + quantiaLances + " lance(s), informe a posição da peça que deseja utilizar para o  lance?");
             printarTabuleiro();
-            int pecaAMexer = sc.nextInt() - 1;
-            Personagem personagemAcao = tabuleiro.getPosicoes().get(pecaAMexer).getPersonagem();
+            int indicepecaAMover = sc.nextInt() - 1;
+            Personagem personagemSelecionado = tabuleiro.getPosicoes().get(indicepecaAMover).getPersonagem();
 
-            if (personagemAcao == null) {
+            if (personagemSelecionado == null) {
                 System.out.println("Não existem peças nesse local");
-            } else if (personagemAcao.getPlayer() == jogador.getNumero()) {
+            } else if (personagemSelecionado.getPlayer() == jogador.getNumero()) {
 
                 //Serve para mostrar as opções dos Deuses, que são levemente diferentes.
-                if (personagemAcao instanceof Deus) {
-                    System.out.println("Você selecionou o " + personagemAcao.getNome() + ", o que deseja fazer com ele?");
+                if (personagemSelecionado instanceof Deus) {
+                    System.out.println("Você selecionou o " + personagemSelecionado.getNome() + ", o que deseja fazer com ele?");
                     System.out.println("""
                             0 - Usar outra peça
                             1 - Mover
                             2 - Atacar
                             3 - Defender
                             """);
-                    if (((Deus) personagemAcao).getBarraEspecial() == ((Deus) personagemAcao).getCargaEspecial()) {
+                    if (((Deus) personagemSelecionado).getBarraEspecial() == ((Deus) personagemSelecionado).getCargaEspecial()) {
                         System.out.println("4 - Realizar Especial");
                     } else {
-                        System.out.println("Carregando Especial " + ((Deus) personagemAcao).getBarraEspecial() + " / " + ((Deus) personagemAcao).getCargaEspecial());
+                        System.out.println("Carregando Especial " + ((Deus) personagemSelecionado).getBarraEspecial() + " / " + ((Deus) personagemSelecionado).getCargaEspecial());
                     }
                 } else {
-                    System.out.println("Você selecionou o " + personagemAcao.getNome() + ", o que deseja fazer com ele?");
+                    System.out.println("Você selecionou o " + personagemSelecionado.getNome() + ", o que deseja fazer com ele?");
                     System.out.println("""
                             0 - Usar outra peça
                             1 - Mover
@@ -205,15 +207,15 @@ public class Main {
                             """);
                 }
 
-                int escolhaMovimento = sc.nextInt();
+                int escolhaAcao = sc.nextInt();
 
-                switch (escolhaMovimento) {
+                switch (escolhaAcao) {
                     case 0:
                         System.out.println("Entendido.\n\n");
                         break;
                     //Move peça
                     case 1:
-                        System.out.println("Seu personagem tem " + personagemAcao.getMovimento() + " de capacidade de movimento, para que lado deseja ir?");
+                        System.out.println("Seu personagem tem " + personagemSelecionado.getMovimento() + " de capacidade de movimento, para que lado deseja ir?");
                         System.out.println("""
                                 1- Para cima
                                 2 - Para baixo
@@ -223,19 +225,19 @@ public class Main {
                                 Importante lembrar que essa ótica é sempre de baixo para cima, então se você está em cima no mapa e deseja avançar,
                                 é necessário que escolha ir para baixo.
                                 """);
-                        int ladoQueVai = sc.nextInt();
+                        int direcaoMovimento = sc.nextInt();
 
-                        if (ladoQueVai < 1 || ladoQueVai > 4) {
+                        if (direcaoMovimento < 1 || direcaoMovimento > 4) {
                             System.out.println("Você inseriu uma opção inválida.");
                         } else {
                             System.out.println("Quantas casas? Lembre-se de que você não pode ir para uma casa que já tenha algum personagem");
-                            int quantiaAAndar = sc.nextInt();
+                            int quantidadeMovimento = sc.nextInt();
 
-                            if (quantiaAAndar > personagemAcao.getMovimento()) {
+                            if (quantidadeMovimento > personagemSelecionado.getMovimento()) {
                                 System.out.println("A capacidade de movimento é inferior à quantia que você deseja andar");
 
-                            } else if (personagemAcao.mover(quantiaAAndar, tabuleiro, ladoQueVai)) {
-                                nLances--;
+                            } else if (personagemSelecionado.mover(quantidadeMovimento, tabuleiro, direcaoMovimento)) {
+                                quantiaLances--;
 
                             } else {
                                 System.out.println("Seu movimento não foi válido.");
@@ -246,8 +248,8 @@ public class Main {
                     //Ataca peça
                     case 2:
                         System.out.println("Informe a peça que deseja atacar");
-                        int pecaAAtacar = sc.nextInt() - 1;
-                        Personagem personagemAtacado = tabuleiro.getPosicoes().get(pecaAAtacar).getPersonagem();
+                        int indicePecaAAtacar = sc.nextInt() - 1;
+                        Personagem personagemAtacado = tabuleiro.getPosicoes().get(indicePecaAAtacar).getPersonagem();
 
                         //verifica possíveis lances inválidos
                         if (personagemAtacado == null) {
@@ -256,14 +258,14 @@ public class Main {
                             System.out.println("Não é possível atacar uma peça aliada.");
                         } else {
 
-                            if (personagemAcao.atacar(personagemAtacado, tabuleiro, adversario)) {
-                                nLances--;
+                            if (personagemSelecionado.atacar(personagemAtacado, tabuleiro, adversario)) {
+                                quantiaLances--;
 
                                 //Verifica se a peça atacada morreu para informar ao usuário.
-                                if (tabuleiro.getPosicoes().get(pecaAAtacar).getPersonagem() == null) {
+                                if (tabuleiro.getPosicoes().get(indicePecaAAtacar).getPersonagem() == null) {
                                     System.out.println("Você matou o inimigo, parabéns.");
                                     if (adversario.getMortos() == adversario.getPersonagensEscolhidos().size()) {
-                                        nLances = 0;
+                                        quantiaLances = 0;
                                     }
                                 } else {
                                     System.out.println("Tropa inimiga atingida com sucesso");
@@ -277,9 +279,9 @@ public class Main {
 
                     // Defende peça, o que no game significa curar aliados.
                     case 3:
-                        if (personagemAcao.defender(tabuleiro)) {
+                        if (personagemSelecionado.defender(tabuleiro)) {
                             System.out.println("Lance realizado com sucesso, ajudou sua tropa aliada.");
-                            nLances--;
+                            quantiaLances--;
                         } else {
                             System.out.println("Não havia ninguém para ser curado alí, jogue novamente.");
                         }
@@ -290,25 +292,25 @@ public class Main {
                         boolean especialUtilizado;
 
                         //Verifica se o personagem escolhido é um Deus
-                        if (personagemAcao instanceof Deus) {
+                        if (personagemSelecionado instanceof Deus) {
 
                             //Verifica qual Deus é, pois, caso seja hades é passado como parametro o jogador que está
                             // realizando uma ação, caso contrário o adversário.
-                            if (personagemAcao instanceof Hades) {
-                                especialUtilizado = ((Hades) personagemAcao).realizarEspecial(tabuleiro, jogador);
+                            if (personagemSelecionado instanceof Hades) {
+                                especialUtilizado = ((Hades) personagemSelecionado).realizarEspecial(tabuleiro, jogador);
                             } else {
-                                especialUtilizado = ((Deus) personagemAcao).realizarEspecial(tabuleiro, adversario);
+                                especialUtilizado = ((Deus) personagemSelecionado).realizarEspecial(tabuleiro, adversario);
                             }
 
                             //Verifica se tudo ocorreu corretamente e printa uma frase específica de cada Deus ao usar o especial
                             if (especialUtilizado) {
-                                ((Deus) personagemAcao).setBarraEspecial(0);
-                                System.out.println(fraseParaOEspecial(personagemAcao, jogador, tabuleiro));
-                                nLances--;
+                                ((Deus) personagemSelecionado).setBarraEspecial(0);
+                                System.out.println(fraseParaOEspecial(personagemSelecionado, jogador, tabuleiro));
+                                quantiaLances--;
 
                                 //Verifica se ainda tem inimigos para combater ou o jogo deve ser encerrado.
                                 if (adversario.getMortos() == adversario.getPersonagensEscolhidos().size()) {
-                                    nLances = 0;
+                                    quantiaLances = 0;
                                 }
                             } else {
                                 System.out.println("Algo aconteceu e não foi possível utilizar o especial.");
@@ -328,14 +330,14 @@ public class Main {
             } else {
                 System.out.println("Você selecionou uma peça do adversário.");
             }
-        } while (nLances > 0);
+        } while (quantiaLances > 0);
     }
 
-    private static String fraseParaOEspecial(Personagem personagemAcao, Jogador jogador, Tabuleiro tabuleiro) {
+    private static String fraseParaOEspecial(Personagem personagemSelecionado, Jogador jogador, Tabuleiro tabuleiro) {
 
-        if (personagemAcao instanceof Hades) {
+        if (personagemSelecionado instanceof Hades) {
             return "Os mortos lhe ajudaram, cura concedida do submundo";
-        } else if (personagemAcao instanceof Poseidon) {
+        } else if (personagemSelecionado instanceof Poseidon) {
             if (procuraDeusAdversario(tabuleiro, jogador) != null) {
 
                 //A frase para Zeus contém uma "piadinha" pois quando poseidon atinge zeus, retira uma parte da barra de especial dele
@@ -346,10 +348,10 @@ public class Main {
                     return "Tsunami na área, acho que eles ficaram gripados, devido a baixa imunidade, todos ficaram sem defesa.";
                 }
             }
-        } else if (personagemAcao instanceof Zeus) {
+        } else if (personagemSelecionado instanceof Zeus) {
             if (procuraDeusAdversario(tabuleiro, jogador) != null) {
 
-                //A frase para Poseidon contém uma "piadinha" pois quando zeus atinge poseidon, retira o dobro de dano
+                //A frase para Poseidon também contém uma "piadinha" pois quando zeus atinge poseidon, retira o dobro de dano
                 if (procuraDeusAdversario(tabuleiro, jogador) instanceof Poseidon) {
                     return "Estão em choque? Dano de eletrocutamento em todos.\n" +
                             "O 'Aquaman' sentiu um pouco mais do impacto.";
@@ -384,17 +386,17 @@ public class Main {
             System.out.println(jogador.getNome() + ", suas casas disponíveis para posicionar suas peças são de " + jogador.getCasasInicio() + " até " + jogador.getCasasFinal());
             System.out.println("Onde você deseja posicionar seu: " + jogador.getPersonagensEscolhidos().get(i).getNome() + "?");
             printarTabuleiroVazio();
-            int escolhaPosicao = sc.nextInt() - 1;
+            int escolhaPosicionamentoTropa = sc.nextInt() - 1;
 
-            if (escolhaPosicao < jogador.getCasasInicio() - 1 || escolhaPosicao > jogador.getCasasFinal() - 1) {
+            if (escolhaPosicionamentoTropa < jogador.getCasasInicio() - 1 || escolhaPosicionamentoTropa > jogador.getCasasFinal() - 1) {
                 System.out.println("Escolha uma casa válida.");
                 i--;
             } else {
-                if (tabuleiro.getPosicoes().get(escolhaPosicao).getPersonagem() != null) {
+                if (tabuleiro.getPosicoes().get(escolhaPosicionamentoTropa).getPersonagem() != null) {
                     System.out.println("Tem uma peça sua aqui já, não é possível escolher essa casa.");
                     i--;
                 } else {
-                    tabuleiro.setPosicoes(escolhaPosicao, jogador.getPersonagensEscolhidos().get(i));
+                    tabuleiro.setPosicoes(escolhaPosicionamentoTropa, jogador.getPersonagensEscolhidos().get(i));
                 }
                 if (i == jogador.getPersonagensEscolhidos().size() - 1) {
                     printarTabuleiro();
@@ -429,42 +431,42 @@ public class Main {
 
     private static void escolhePersonagens(Jogador jogador) {
 
-        Personagem arqueiroSelecao = new Arqueiro(0);
-        Personagem centauroSelecao = new Centauro(0);
-        Personagem ninfaDoBosqueSelecao = new NinfaDoBosque(0);
-        Deus zeusSelecao = new Zeus(0);
-        Deus hadesSelecao = new Hades(0);
-        Deus poseidonSelecao = new Poseidon(0);
-        int deuses = 0;
+        Personagem selecionarArqueiro = new Arqueiro(0);
+        Personagem selecionarCentauro = new Centauro(0);
+        Personagem selecionarNinfaDoBosque = new NinfaDoBosque(0);
+        Deus selecionarZeus = new Zeus(0);
+        Deus selecionarHades = new Hades(0);
+        Deus selecionarPoseidon = new Poseidon(0);
+        int quantiaDeus = 0;
 
         System.out.println(jogador.getNome() + ", você tem direito a jogar com um Deus de sua escolha: ");
-        System.out.println("1 - Zeus, custo: " + zeusSelecao.getCusto());
-        System.out.println("2 - Hades, custo: " + hadesSelecao.getCusto());
-        System.out.println("3 - Poseidon, custo: " + poseidonSelecao.getCusto());
+        System.out.println("1 - Zeus, custo: " + selecionarZeus.getCusto());
+        System.out.println("2 - Hades, custo: " + selecionarHades.getCusto());
+        System.out.println("3 - Poseidon, custo: " + selecionarPoseidon.getCusto());
         System.out.println("4 - Não desejo usar nenhum Deus. ");
-        int opcaoDeus = sc.nextInt();
+        int escolhaDeus = sc.nextInt();
 
-        switch (opcaoDeus) {
+        switch (escolhaDeus) {
             case 1:
                 jogador.getPersonagensEscolhidos().add(new Zeus(jogador.getNumero()));
-                jogador.setElixir(jogador.getElixir() - zeusSelecao.getCusto());
-                deuses = 1;
+                jogador.setElixir(jogador.getElixir() - selecionarZeus.getCusto());
+                quantiaDeus = 1;
                 break;
 
             case 2:
                 jogador.getPersonagensEscolhidos().add(new Hades(jogador.getNumero()));
-                jogador.setElixir(jogador.getElixir() - hadesSelecao.getCusto());
-                deuses = 1;
+                jogador.setElixir(jogador.getElixir() - selecionarHades.getCusto());
+                quantiaDeus = 1;
                 break;
 
             case 3:
                 jogador.getPersonagensEscolhidos().add(new Poseidon(jogador.getNumero()));
-                jogador.setElixir(jogador.getElixir() - poseidonSelecao.getCusto());
-                deuses = 1;
+                jogador.setElixir(jogador.getElixir() - selecionarPoseidon.getCusto());
+                quantiaDeus = 1;
                 break;
 
             case 4:
-                deuses = -1;
+                quantiaDeus = -1;
                 break;
 
             default:
@@ -473,29 +475,30 @@ public class Main {
         }
         do {
 
-            System.out.println("Caro(a) " + jogador.getNome() + ", você possuí no momento " + jogador.getElixir() + " de elixir.");
+            System.out.println("Caro(a) " + jogador.getNome() + ", você possuí no momento " + jogador.getElixir() + " de elixir. E "+
+                    jogador.getPersonagensEscolhidos().size()+" tropas escolhidas, o máximo são 20. Você tem direito a mais "+(20-jogador.getPersonagensEscolhidos().size()));
             System.out.println("Escolha o personagem que você deseja adicionar ao seu exército:");
-            System.out.println("1 - Arqueiro, custo: " + arqueiroSelecao.getCusto());
-            System.out.println("2 - Centauro, custo: " + centauroSelecao.getCusto());
-            System.out.println("3 - Ninfa do Bosque, custo: " + ninfaDoBosqueSelecao.getCusto());
+            System.out.println("1 - Arqueiro, custo: " + selecionarArqueiro.getCusto());
+            System.out.println("2 - Centauro, custo: " + selecionarCentauro.getCusto());
+            System.out.println("3 - Ninfa do Bosque, custo: " + selecionarNinfaDoBosque.getCusto());
             System.out.println("4 - Estou satisfeito com o que tenho. ");
             System.out.println("0 - Não quero mais jogar");
-            int opcaoPersona = sc.nextInt();
+            int escolhaPersonagem = sc.nextInt();
 
-            switch (opcaoPersona) {
+            switch (escolhaPersonagem) {
                 case 1:
                     jogador.getPersonagensEscolhidos().add(new Arqueiro(jogador.getNumero()));
-                    jogador.setElixir(jogador.getElixir() - arqueiroSelecao.getCusto());
+                    jogador.setElixir(jogador.getElixir() - selecionarArqueiro.getCusto());
                     break;
 
                 case 2:
                     jogador.getPersonagensEscolhidos().add(new Centauro(jogador.getNumero()));
-                    jogador.setElixir(jogador.getElixir() - centauroSelecao.getCusto());
+                    jogador.setElixir(jogador.getElixir() - selecionarCentauro.getCusto());
                     break;
 
                 case 3:
                     jogador.getPersonagensEscolhidos().add(new NinfaDoBosque(jogador.getNumero()));
-                    jogador.setElixir(jogador.getElixir() - ninfaDoBosqueSelecao.getCusto());
+                    jogador.setElixir(jogador.getElixir() - selecionarNinfaDoBosque.getCusto());
                     break;
 
                 case 4:
@@ -517,6 +520,11 @@ public class Main {
 
             }
 
+            if (jogador.getPersonagensEscolhidos().size()==20){
+                System.out.println("Você atingiou o máximo de tropas.");
+                jogador.setElixir(0);
+            }
+            
         } while (jogador.getElixir() >= 2);
 
         System.out.println("Sua escolha de personagens foi realizada. Boa sorte " + jogador.getNome() + "!\n\n");
@@ -534,8 +542,8 @@ public class Main {
                 6 - Hades
                 7 - Retornar ao Menu Inicial              
                 """);
-        int opcaoPersonagem = sc.nextInt();
-        switch (opcaoPersonagem) {
+        int escolhaPersonagemgem = sc.nextInt();
+        switch (escolhaPersonagemgem) {
             case 1:
                 mostrarInfo(new Arqueiro(0));
                 break;

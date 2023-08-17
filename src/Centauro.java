@@ -16,60 +16,60 @@ public class Centauro extends Personagem {
 
     @Override
     public boolean defender(Tabuleiro tabuleiro) {
-        int semCura = 0;
+        int quantidadeSemCura = 0;
         ArrayList<Posicao> posicoes = tabuleiro.getPosicoes();
-        Personagem aSerCurado = null;
-        int indexPersonagem = 0;
+        Personagem personagemACurar = null;
+        int indicePersonagem = 0;
 
 
         // Pega o index do Centauro
         for (Posicao posicao : posicoes) {
             if (posicao.getPersonagem() == this) {
-                indexPersonagem = tabuleiro.getPosicoes().indexOf(posicao);
+                indicePersonagem = tabuleiro.getPosicoes().indexOf(posicao);
             }
         }
         //Centauro cura para o eixo x, então verifica se ele não está em alguma lateral.
-        if (!(indexPersonagem % 10 == 0) && !((indexPersonagem + 1) % 10 == 0)) {
+        if (!(indicePersonagem % 10 == 0) && !((indicePersonagem + 1) % 10 == 0)) {
 
             //Realiza a cura à direita
-            if (posicoes.get(indexPersonagem + 1).getPersonagem() != null) {
-                aSerCurado = posicoes.get(indexPersonagem + 1).getPersonagem();
-                aSerCurado.setVida(aSerCurado.getVida() + aSerCurado.getVidaMax() / 100 * 15);
-                aSerCurado.verificaVidaMaxima();
+            if (posicoes.get(indicePersonagem + 1).getPersonagem() != null) {
+                personagemACurar = posicoes.get(indicePersonagem + 1).getPersonagem();
+                personagemACurar.setVida(personagemACurar.getVida() + personagemACurar.getVidaMax() / 100 * 15);
+                personagemACurar.verificaVidaMaxima();
             } else {
-                semCura++;
+                quantidadeSemCura++;
             }
 
             //Realiza a cura à esquerda
-            if (posicoes.get(indexPersonagem - 1).getPersonagem() != null) {
-                aSerCurado = posicoes.get(indexPersonagem - 1).getPersonagem();
-                aSerCurado.setVida(aSerCurado.getVida() + aSerCurado.getVidaMax() / 100 * 15);
-                aSerCurado.verificaVidaMaxima();
+            if (posicoes.get(indicePersonagem - 1).getPersonagem() != null) {
+                personagemACurar = posicoes.get(indicePersonagem - 1).getPersonagem();
+                personagemACurar.setVida(personagemACurar.getVida() + personagemACurar.getVidaMax() / 100 * 15);
+                personagemACurar.verificaVidaMaxima();
             } else {
-                semCura++;
+                quantidadeSemCura++;
             }
 
             //Realiza cura apenas para o lado interno do tabuleiro evitando que a cura ocorra de maneira inesperada.
-        } else if (indexPersonagem % 10 == 0) {
-            if (posicoes.get(indexPersonagem + 1).getPersonagem() != null) {
-                aSerCurado = posicoes.get(indexPersonagem + 1).getPersonagem();
-                aSerCurado.setVida(aSerCurado.getVida() + aSerCurado.getVidaMax() / 100 * 15);
-                aSerCurado.verificaVidaMaxima();
+        } else if (indicePersonagem % 10 == 0) {
+            if (posicoes.get(indicePersonagem + 1).getPersonagem() != null) {
+                personagemACurar = posicoes.get(indicePersonagem + 1).getPersonagem();
+                personagemACurar.setVida(personagemACurar.getVida() + personagemACurar.getVidaMax() / 100 * 15);
+                personagemACurar.verificaVidaMaxima();
             } else {
                 return false;
             }
-        } else if ((indexPersonagem + 1) % 10 == 0) {
-            if (posicoes.get(indexPersonagem - 1).getPersonagem() != null) {
-                aSerCurado = posicoes.get(indexPersonagem - 1).getPersonagem();
-                aSerCurado.setVida(aSerCurado.getVida() + aSerCurado.getVidaMax() / 100 * 15);
-                aSerCurado.verificaVidaMaxima();
+        } else if ((indicePersonagem + 1) % 10 == 0) {
+            if (posicoes.get(indicePersonagem - 1).getPersonagem() != null) {
+                personagemACurar = posicoes.get(indicePersonagem - 1).getPersonagem();
+                personagemACurar.setVida(personagemACurar.getVida() + personagemACurar.getVidaMax() / 100 * 15);
+                personagemACurar.verificaVidaMaxima();
             } else {
                 return false;
             }
         }
 
         //Verificação caso não haja nenhuma peça nos dois lados, pois em um é possível.
-        if (semCura == 2) {
+        if (quantidadeSemCura == 2) {
             return false;
         }
         return true;

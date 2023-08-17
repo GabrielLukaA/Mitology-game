@@ -19,58 +19,58 @@ public class Arqueiro extends Personagem {
 
     @Override
     public boolean defender(Tabuleiro tabuleiro) {
-        int semCura = 0;
+        int quantidadeSemCura = 0;
         ArrayList<Posicao> posicoes = tabuleiro.getPosicoes();
-        Personagem aSerCurado = null;
-        int indexPersonagem = 0;
+        Personagem personagemACurar = null;
+        int indicePersonagem = 0;
 
         //Pega o index do Arqueiro
         for (Posicao posicao : posicoes) {
             if (posicao.getPersonagem() == this) {
-                indexPersonagem = tabuleiro.getPosicoes().indexOf(posicao);
+                indicePersonagem = tabuleiro.getPosicoes().indexOf(posicao);
             }
         }
         //Semelhante ao Centauro, mas agora realizando verificações se não está na primeira ou ultima linha do tabuleiro,
         //pois o arqueiro cura no eixo y
-        if (indexPersonagem >= 10 && indexPersonagem <= 89) {
+        if (indicePersonagem >= 10 && indicePersonagem <= 89) {
 
-            if (posicoes.get(indexPersonagem + 10).getPersonagem() != null) {
-                aSerCurado = posicoes.get(indexPersonagem + 10).getPersonagem();
-                aSerCurado.setVida(aSerCurado.getVida() + aSerCurado.getVidaMax() / 100 * 15);
-                aSerCurado.verificaVidaMaxima();
+            if (posicoes.get(indicePersonagem + 10).getPersonagem() != null) {
+                personagemACurar = posicoes.get(indicePersonagem + 10).getPersonagem();
+                personagemACurar.setVida(personagemACurar.getVida() + personagemACurar.getVidaMax() / 100 * 15);
+                personagemACurar.verificaVidaMaxima();
             } else {
-                semCura++;
+                quantidadeSemCura++;
             }
 
-            if (posicoes.get(indexPersonagem - 10).getPersonagem() != null) {
-                aSerCurado = posicoes.get(indexPersonagem - 10).getPersonagem();
-                aSerCurado.setVida(aSerCurado.getVida() + aSerCurado.getVidaMax() / 100 * 15);
-                aSerCurado.verificaVidaMaxima();
+            if (posicoes.get(indicePersonagem - 10).getPersonagem() != null) {
+                personagemACurar = posicoes.get(indicePersonagem - 10).getPersonagem();
+                personagemACurar.setVida(personagemACurar.getVida() + personagemACurar.getVidaMax() / 100 * 15);
+                personagemACurar.verificaVidaMaxima();
             } else {
-                semCura++;
+                quantidadeSemCura++;
             }
 
-        } else if (indexPersonagem < 10) {
-            if (posicoes.get(indexPersonagem + 10).getPersonagem() != null) {
-                aSerCurado = posicoes.get(indexPersonagem + 10).getPersonagem();
-                aSerCurado.setVida(aSerCurado.getVida() + aSerCurado.getVidaMax() / 100 * 15);
-                aSerCurado.verificaVidaMaxima();
+        } else if (indicePersonagem < 10) {
+            if (posicoes.get(indicePersonagem + 10).getPersonagem() != null) {
+                personagemACurar = posicoes.get(indicePersonagem + 10).getPersonagem();
+                personagemACurar.setVida(personagemACurar.getVida() + personagemACurar.getVidaMax() / 100 * 15);
+                personagemACurar.verificaVidaMaxima();
             } else {
                 return false;
             }
 
-        } else if (indexPersonagem > 89) {
-            if (posicoes.get(indexPersonagem - 10).getPersonagem() != null) {
-                aSerCurado = posicoes.get(indexPersonagem - 10).getPersonagem();
-                aSerCurado.setVida(aSerCurado.getVida() + aSerCurado.getVidaMax() / 100 * 15);
-                aSerCurado.verificaVidaMaxima();
+        } else if (indicePersonagem > 89) {
+            if (posicoes.get(indicePersonagem - 10).getPersonagem() != null) {
+                personagemACurar = posicoes.get(indicePersonagem - 10).getPersonagem();
+                personagemACurar.setVida(personagemACurar.getVida() + personagemACurar.getVidaMax() / 100 * 15);
+                personagemACurar.verificaVidaMaxima();
             } else {
                 return false;
             }
         }
 
 //Verificação se não conseguiu curar ninguém.
-        if (semCura == 2) {
+        if (quantidadeSemCura == 2) {
             return false;
         }
         return true;
