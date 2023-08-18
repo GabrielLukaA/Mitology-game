@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public class NinfaDoBosque extends Personagem {
     public NinfaDoBosque(int numero) {
-        this.setVida(125);
+        this.setVida(75);
         this.setVidaMax(75);
         this.setAtaque(55);
         this.setDefesa(20);
@@ -26,7 +26,7 @@ public class NinfaDoBosque extends Personagem {
                 int l = posicoes.indexOf(posicao);
                 System.out.println(l);
 
-                // Caso seja possível curar 8 casas
+                // Caso seja possível curar até 8 casas
                 if (l > 9 & l < 90) {
                     //Verifica se está em alguma das laterais e cura somente para a parte interna.
                     if (l % 10 == 0) {
@@ -107,9 +107,7 @@ public class NinfaDoBosque extends Personagem {
             personagem.setVida(personagem.getVida() + (personagem.getVida() / 100 * 40));
 
             //Apenas garante que,  nenhum personagem tenha mais vida do que o definido como vida máxima.
-            if (personagem.getVida() > personagem.getVidaMax()) {
-                personagem.setVida(personagem.getVidaMax());
-            }
+            personagem.verificaVidaMaxima();
             return true;
         }
         return false;

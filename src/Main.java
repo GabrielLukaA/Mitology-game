@@ -154,30 +154,23 @@ public class Main {
                 System.out.println("Não existem peças nesse local");
             } else if (personagemSelecionado.getPlayer() == jogador.getNumero()) {
 
+
+                System.out.println("Você selecionou o " + personagemSelecionado.getNome() + ", o que deseja fazer com ele?");
+                System.out.println("""
+                        0 - Usar outra peça
+                        1 - Mover
+                        2 - Atacar
+                        3 - Defender
+                        """);
+
                 //Serve para mostrar as opções dos Deuses, que são levemente diferentes.
                 if (personagemSelecionado instanceof Deus) {
-                    System.out.println("Você selecionou o " + personagemSelecionado.getNome() + ", o que deseja fazer com ele?");
-                    System.out.println("""
-                            0 - Usar outra peça
-                            1 - Mover
-                            2 - Atacar
-                            3 - Defender
-                            """);
                     if (((Deus) personagemSelecionado).getBarraEspecial() == ((Deus) personagemSelecionado).getCargaEspecial()) {
                         System.out.println("4 - Realizar Especial");
                     } else {
                         System.out.println("Carregando Especial " + ((Deus) personagemSelecionado).getBarraEspecial() + " / " + ((Deus) personagemSelecionado).getCargaEspecial());
                     }
-                } else {
-                    System.out.println("Você selecionou o " + personagemSelecionado.getNome() + ", o que deseja fazer com ele?");
-                    System.out.println("""
-                            0 - Usar outra peça
-                            1 - Mover
-                            2 - Atacar
-                            3 - Defender
-                            """);
                 }
-
                 int escolhaAcao = sc.nextInt();
 
                 switch (escolhaAcao) {
@@ -201,7 +194,7 @@ public class Main {
                         if (direcaoMovimento < 1 || direcaoMovimento > 4) {
                             System.out.println("Você inseriu uma opção inválida.");
                         } else {
-                            System.out.println("Quantas casas? Lembre-se de que você não pode ir para uma casa que já tenha algum personagem");
+                            System.out.println("Quantas casas? Lembre-se de que você não pode ir para uma casa que já tenha algum personagem.");
                             int quantidadeMovimento = sc.nextInt();
 
                             if (quantidadeMovimento > personagemSelecionado.getMovimento()) {
